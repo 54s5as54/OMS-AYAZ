@@ -2,2139 +2,2321 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Leopards OMS 2.0 | Operations Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operations Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
-    :root{
-      --leopards-red:#be123c;
-      --leopards-yellow:#f59e0b;
-
-      --sidebar-dark:#0f172a;
-      --sidebar-accent:#1e293b;
-
-      --bg-light:#f1f5f9;
-      --white:#fff;
-
-      --text-main:#0f172a;
-      --text-muted:#94a3b8;
-      --text-secondary:#64748b;
-
-      --border-light:#cbd5e1;
-      --radius-lg:16px;
-
-      --shadow-card:0 4px 6px -1px rgba(0,0,0,.10),0 2px 4px -1px rgba(0,0,0,.06);
-      --shadow-soft:0 1px 2px rgba(0,0,0,.05);
-
-      --focus:0 0 0 3px rgba(245,158,11,.25);
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Poppins',sans-serif;
     }
-
-    *{ box-sizing:border-box; margin:0; padding:0; }
 
     body{
-      font-family: Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
-      background:var(--bg-light);
-      color:var(--text-main);
-      line-height:1.5;
-      height:100vh;
-      overflow:hidden;
-    }
-
-    .app{
+      min-height:100vh;
+      background:linear-gradient(135deg,#07111f,#0d1f38,#102d4e);
+      overflow-x:hidden;
+      color:white;
       display:flex;
-      width:100%;
-      height:100%;
-      min-height:0;
     }
 
-    /* Sidebar */
+    body::before{
+      content:'';
+      position:fixed;
+      width:400px;
+      height:400px;
+      background:rgba(0,255,255,0.18);
+      border-radius:50%;
+      top:-120px;
+      left:-100px;
+      filter:blur(40px);
+      z-index:-1;
+      animation:float 8s infinite ease-in-out;
+    }
+
+    body::after{
+      content:'';
+      position:fixed;
+      width:350px;
+      height:350px;
+      background:rgba(255,170,0,0.15);
+      border-radius:50%;
+      bottom:-100px;
+      right:-100px;
+      filter:blur(50px);
+      z-index:-1;
+      animation:float2 10s infinite ease-in-out;
+    }
+
+    @keyframes float{
+      0%,100%{transform:translateY(0px);}
+      50%{transform:translateY(40px);}
+    }
+
+    @keyframes float2{
+      0%,100%{transform:translateY(0px);}
+      50%{transform:translateY(-40px);}
+    }
+
     .sidebar{
-      width:280px;
-      background:var(--sidebar-dark);
-      color:var(--white);
-      display:flex;
-      flex-direction:column;
-      border-right:1px solid rgba(255,255,255,.05);
-      flex-shrink:0;
-      min-height:0;
+      width:270px;
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(20px);
+      border-right:1px solid rgba(255,255,255,0.15);
+      min-height:100vh;
+      padding:25px 20px;
+      position:fixed;
+      left:18px;
+      top:0;
     }
 
     .logo{
-      margin:14px;
-      padding:34px 18px 22px;
-      border-radius:14px;
-      font-weight:900;
-      font-size:24px;
-      letter-spacing:-.8px;
-      background:linear-gradient(135deg,var(--leopards-red) 0%, #9f1239 100%);
-      box-shadow:var(--shadow-soft);
       display:flex;
-      flex-direction:column;
-      gap:8px;
+      align-items:center;
+      gap:12px;
+      margin-bottom:35px;
     }
 
-    .logo small{
-      font-size:.62rem;
-      letter-spacing:2.2px;
-      font-weight:500;
-      color:rgba(255,255,255,.80);
+    .logo-icon{
+      width:55px;
+      height:55px;
+      border-radius:18px;
+      background:linear-gradient(135deg,#00d2ff,#3a7bd5);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:24px;
+      box-shadow:0 10px 25px rgba(0,210,255,0.35);
     }
 
-    .nav{
-      padding:10px 14px 0;
-      overflow:auto;
-      min-height:0;
-    }
-
-    .nav-section-title{
-      padding:10px 12px 6px;
-      color:rgba(255,255,255,.65);
-      font-size:.72rem;
-      letter-spacing:.06em;
-      text-transform:uppercase;
+    .logo h2{
+      font-size:22px;
       font-weight:700;
     }
 
-    .nav-item, .nav-group-header{
-      width:100%;
-      border:0;
-      background:transparent;
-      color:var(--text-muted);
-      cursor:pointer;
-      padding:12px 16px;
-      border-radius:12px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      transition:background .15s ease, color .15s ease, transform .05s ease;
-      font-weight:650;
-      font-size:.9rem;
+    .menu-title{
+      color:#7ea5cf;
+      margin-bottom:10px;
+      font-size:14px;
+      letter-spacing:1px;
+      text-transform:uppercase;
     }
 
-    .nav-item:hover, .nav-group-header:hover{
-      background:var(--sidebar-accent);
-      color:var(--white);
+    .menu #sidebarMenu,
+    .menu{
+      padding-top:0;
     }
 
-    .nav-item.active{
-      background:rgba(190,18,60,.16);
-      color:#fb7185;
-      font-weight:750;
+    .accordion-item:first-child{
+      margin-top:0;
     }
 
-    .nav-item.sub{
-      padding:10px 16px 10px 44px;
-      font-size:.82rem;
-      font-weight:600;
-      color:#94a3b8;
-    }
-
-    .nav-group{
-      margin-bottom:8px;
-      border-radius:14px;
-    }
-
-    .nav-group-header{
-      padding:12px 16px;
-      color:#e2e8f0;
-      font-weight:800;
-      background:transparent;
-    }
-
-    .nav-group-header .chev{
-      opacity:.6;
-      font-size:.75rem;
-      transform:rotate(0deg);
-      transition:transform .2s ease;
-    }
-    .nav-group.open .nav-group-header .chev{ transform:rotate(180deg); }
-
-    .sub-menu{
-      display:none;
-      padding:6px 0 6px;
-      background:rgba(0,0,0,.14);
-      border:1px solid rgba(255,255,255,.04);
-      border-radius:14px;
-      margin:8px 2px 0;
-    }
-    .nav-group.open .sub-menu{ display:block; }
-
-    .sidebar-footer{
-      padding:18px 14px;
-      text-align:center;
-      font-size:.75em;
-      color:#94a3b8;
-      border-top:1px solid rgba(255,255,255,.08);
-    }
-
-    /* Main */
-    .main{
-      flex:1;
+    .menu{
       display:flex;
       flex-direction:column;
-      min-width:0;
-      min-height:0;
-      background:var(--bg-light);
+      gap:10px;
+      max-height:calc(100vh - 140px);
+      overflow-y:auto;
+      padding-right:6px;
     }
 
-    header{
-      background:var(--white);
-      padding:18px 28px;
+    .accordion-item{
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.06);
+      border-radius:18px;
+      overflow:hidden;
+    }
+
+    .accordion-btn{
+      width:100%;
+      text-align:left;
+      cursor:pointer;
+      padding:14px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      color:white;
+      border:none;
+      background:transparent;
+      font-size:14px;
+      transition:0.2s ease;
+      outline:none;
+    }
+
+    .accordion-btn:hover{
+      background:rgba(255,255,255,0.08);
+    }
+
+    .accordion-label{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:600;
+    }
+
+    .chev {
+      display:none;
+    }
+
+    .accordion-content{
+      display:none;
+      padding:6px 10px 12px 10px;
+      border-top:1px solid rgba(255,255,255,0.06);
+    }
+
+    .accordion-item.open .accordion-content{
+      display:block;
+    }
+
+    .accordion-item.open .accordion-btn .chev {
+      display: block;
+    }
+
+    .accordion-item.open .chev{
+      transform:rotate(180deg);
+    }
+
+    .accordion-link{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      text-decoration:none;
+      color:white;
+      padding:10px 10px;
+      margin-top:8px;
+      border-radius:14px;
+      background:rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.05);
+      transition:0.25s ease;
+      font-size:13px;
+    }
+
+    .accordion-link:hover{
+      transform:translateX(6px);
+      background:rgba(255,255,255,0.10);
+    }
+
+    .main{
+      margin-left:270px;
+      width:calc(100% - 270px);
+      padding:30px;
+    }
+
+    .topbar{
       display:flex;
       justify-content:space-between;
       align-items:center;
-      border-bottom:1px solid var(--border-light);
-      min-height:86px;
-      gap:16px;
-      flex-shrink:0;
+      margin-bottom:35px;
+      flex-wrap:wrap;
+      gap:20px;
     }
 
-    .user-info{
-      line-height:1.25;
-      font-size:.95rem;
+    .topbar h1{
+      font-size:34px;
+      font-weight:700;
     }
 
-    .user-info strong{
-      color:var(--sidebar-dark);
+    .search-box{
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.1);
+      border-radius:20px;
+      padding:14px 18px;
+      width:300px;
+      backdrop-filter:blur(12px);
     }
 
-    .header-right{
+    .search-box input{
+      width:100%;
+      background:none;
+      border:none;
+      outline:none;
+      color:white;
+      font-size:15px;
+    }
+
+    .dashboard-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:24px;
+    }
+
+    .bubble-card{
+      position:relative;
+      padding:28px;
+      border-radius:30px;
+      overflow:hidden;
+      backdrop-filter:blur(20px);
+      border:1px solid rgba(255,255,255,0.08);
+      transition:0.35s ease;
+      background:rgba(255,255,255,0.08);
+      box-shadow:
+      inset 0 0 15px rgba(255,255,255,0.08),
+      0 15px 35px rgba(0,0,0,0.35);
+    }
+
+    .bubble-card:hover{
+      transform:translateY(-10px) scale(1.02);
+    }
+
+    .bubble-card::before{
+      content:'';
+      position:absolute;
+      width:140px;
+      height:140px;
+      background:rgba(255,255,255,0.12);
+      border-radius:50%;
+      top:-50px;
+      right:-30px;
+    }
+
+    .bubble-card::after{
+      content:'';
+      position:absolute;
+      width:90px;
+      height:90px;
+      background:rgba(255,255,255,0.08);
+      border-radius:50%;
+      bottom:-25px;
+      left:-20px;
+    }
+
+    .card-icon{
+      width:65px;
+      height:65px;
+      border-radius:20px;
       display:flex;
       align-items:center;
-      gap:14px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
+      justify-content:center;
+      font-size:28px;
+      margin-bottom:20px;
+      box-shadow:0 10px 25px rgba(0,0,0,0.25);
     }
 
-    .expiry-tag{
-      color:var(--leopards-red);
-      font-weight:900;
-      font-size:.75rem;
-      background:#fef2f2;
-      padding:6px 12px;
-      border-radius:999px;
-      border:1px solid #fee2e2;
-      white-space:nowrap;
+    .blue .card-icon{
+      background:linear-gradient(135deg,#00d2ff,#3a7bd5);
     }
 
-    .current-datetime{
-      font-size:.9rem;
-      color:var(--text-secondary);
-      white-space:nowrap;
+    .orange .card-icon{
+      background:linear-gradient(135deg,#ff9966,#ff5e62);
     }
 
-    .page{
-      flex:1;
-      overflow:auto;
-      padding:26px 28px 32px;
-      min-height:0;
+    .purple .card-icon{
+      background:linear-gradient(135deg,#8e2de2,#4a00e0);
     }
 
-    .page h2{
-      font-size:1.85rem;
-      font-weight:900;
-      letter-spacing:-.02em;
+    .green .card-icon{
+      background:linear-gradient(135deg,#00c9a7,#00e4b3);
+    }
+
+    .yellow .card-icon{
+      background:linear-gradient(135deg,#f7971e,#ffd200);
+    }
+
+    .pink .card-icon{
+      background:linear-gradient(135deg,#ff6fd8,#3813c2);
+    }
+
+    .bubble-card h3{
+      font-size:22px;
       margin-bottom:10px;
     }
 
-    .page h3{
-      font-size:1rem;
-      font-weight:650;
-      color:var(--text-secondary);
-      margin-bottom:22px;
+    .bubble-card p{
+      color:#d8e4f3;
+      font-size:14px;
+      line-height:1.7;
+      margin-bottom:18px;
     }
 
-    /* Cards / Metrics */
-    .metrics-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(210px,1fr));
-      gap:18px;
-      margin:18px 0 28px;
-    }
-
-    .card{
-      background:var(--white);
-      border:1px solid var(--border-light);
-      border-radius:var(--radius-lg);
-      box-shadow:var(--shadow-card);
-    }
-
-    .metric{
-      padding:22px 22px;
-      transition:transform .2s ease;
-    }
-    .metric:hover{ transform:translateY(-3px); }
-
-    .metric h4{
-      font-size:.72rem;
-      text-transform:uppercase;
-      letter-spacing:.06em;
-      color:var(--text-muted);
-      margin-bottom:8px;
-      font-weight:850;
-    }
-
-    .metric .value{
-      font-size:2.25rem;
-      font-weight:950;
-      letter-spacing:-1px;
-    }
-
-    /* Table */
-    .oms-table{
-      width:100%;
-      border-collapse:collapse;
-      background:var(--white);
-      border:1px solid var(--border-light);
-      border-radius:var(--radius-lg);
-      overflow:hidden;
-    }
-    .oms-table th, .oms-table td{
-      padding:14px 18px;
-      text-align:left;
-      font-size:.9rem;
-      border-bottom:1px solid rgba(203,213,225,.75);
-    }
-    .oms-table th{
-      background:#f8fafc;
-      color:var(--text-muted);
-      text-transform:uppercase;
-      font-size:.72rem;
-      font-weight:900;
-      letter-spacing:.05em;
-    }
-    .oms-table tbody tr:last-child td{ border-bottom:none; }
-
-    .oms-table tbody tr:not(.urgent-row):hover{ background:#f9f9f9; }
-
-    .urgent-row{ background:#fffced; }
-    .urgent-row td{ color:#856404; font-weight:800; }
-
-    /* Inputs + Buttons */
-    .search-input{
-      width:100%;
-      padding:10px 14px;
-      border:1px solid var(--border-light);
-      border-radius:10px;
-      font-size:.9rem;
-      box-shadow:inset 0 1px 3px rgba(0,0,0,.05);
-      transition:border-color .15s ease, box-shadow .15s ease;
-      background:var(--white);
-    }
-    .search-input:focus{
-      border-color:var(--leopards-yellow);
-      outline:none;
-      box-shadow:var(--focus);
-    }
-
-    /* General (Leopards-General) - bubble counter + hide empty table */
-    #lg-scan-counter{
-      display:inline-block !important;
-      font-size:3rem !important;
-      font-weight:1000 !important;
-      letter-spacing:-1px;
-      line-height:1;
-      padding:16px 22px;
-      border-radius:999px;
-      color:#be123c;
-      background:rgba(190,18,60,.08);
-      border:2px solid rgba(190,18,60,.25);
-      box-shadow:
-        0 10px 18px rgba(190,18,60,.14),
-        inset 0 1px 0 rgba(255,255,255,.65);
-      position:relative;
-      overflow:hidden;
-    }
-
-    /* "water bubble" highlight */
-    #lg-scan-counter::after{
-      content:'';
-      position:absolute;
-      top:-20px;
-      left:18px;
-      width:52px;
-      height:52px;
-      background:rgba(255,255,255,.45);
-      border-radius:999px;
-      filter:blur(1px);
-      transform:rotate(15deg);
-      pointer-events:none;
-    }
-
-    /* Hide General shipment table wrapper when tbody has only the "empty" placeholder row */
-    .lg-hide-when-empty:has(tbody#lg-scan-table-body tr[data-empty="1"]){
-      display:none;
-    }
-
-    .btn{
-      border:0;
-      cursor:pointer;
-      border-radius:10px;
-      padding:10px 14px;
-      font-weight:850;
-      transition:transform .05s ease, filter .15s ease, background .15s ease;
-      user-select:none;
-      white-space:nowrap;
-    }
-
-    .btn:active{ transform:translateY(1px); }
-
-    .btn-primary{
-      background:var(--leopards-red);
-      color:var(--white);
-    }
-    .btn-primary:hover{ filter:brightness(.95); }
-
-    .btn-muted{
-      background:#7f8c8d;
-      color:#fff;
-    }
-
-    .btn-danger{
-      background:#e74c3c;
-      color:#fff;
-      padding:8px 10px;
-      font-size:.82rem;
-      border-radius:8px;
-    }
-
-    .btn-info{
-      background:#3498db;
-      color:#fff;
-      padding:8px 10px;
-      font-size:.82rem;
-      border-radius:8px;
-    }
-
-    /* Status pills */
-    .status-pill{
+    .card-btn{
       display:inline-block;
-      padding:4px 10px;
-      border-radius:999px;
-      font-size:.75em;
-      font-weight:950;
-      text-transform:uppercase;
-      white-space:nowrap;
-      border:1px solid rgba(0,0,0,.04);
+      padding:12px 20px;
+      border-radius:14px;
+      background:rgba(255,255,255,0.12);
+      color:white;
+      text-decoration:none;
+      transition:0.3s ease;
+      border:1px solid rgba(255,255,255,0.1);
     }
-    .status-pill.urgent{ background:var(--leopards-yellow); color:#000; }
-    .status-pill.acknowledged{ background:#d7ffd7; color:#2e7d32; }
-    .status-pill.pending{ background:#fff3cd; color:#856404; }
-    .status-pill.closed{ background:#e0f2f7; color:#0288d1; }
-    .status-pill.verified{ background:#e8f5e9; color:#388e3c; }
 
-    /* Placeholder */
-    .placeholder{
-      background:var(--white);
-      border:1px solid var(--border-light);
-      border-radius:var(--radius-lg);
-      box-shadow:var(--shadow-card);
-      text-align:center;
-      padding:46px 22px;
-      color:var(--text-muted);
+    .card-btn:hover{
+      background:white;
+      color:#111;
+    }
+
+    .stats-section{
+      margin-top:35px;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:25px;
+    }
+
+    .glass-panel{
+      padding:25px;
+      border-radius:28px;
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(20px);
+      border:1px solid rgba(255,255,255,0.08);
+      box-shadow:0 15px 35px rgba(0,0,0,0.25);
+    }
+
+    .progress-box{
       margin-top:20px;
     }
 
-    /* Generic layout helpers */
-    .row{
+    .progress-title{
       display:flex;
-      gap:14px;
-      flex-wrap:wrap;
-      align-items:center;
       justify-content:space-between;
-      margin:12px 0 18px;
+      margin-bottom:10px;
+      font-size:14px;
     }
 
-    .hint{
-      color:var(--text-secondary);
-      font-weight:700;
-      font-size:.9rem;
-    }
-
-    .upload-box{
-      border:2px dashed var(--border-light);
-      background:var(--white);
-      border-radius:14px;
-      padding:44px 20px;
-      text-align:center;
-      color:var(--text-secondary);
-      box-shadow:var(--shadow-card);
-      margin-top:16px;
-    }
-
-    .grid-2{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:18px;
-    }
-    /* Leopards-General UI tweaks */
-    .lg-general-sm .hint{
-      font-size:.78rem !important;
-      font-weight:900 !important;
-    }
-    .lg-general-sm .search-input{
-      padding:8px 12px !important;
-      font-size:.82rem !important;
-      border-radius:10px !important;
-    }
-    .lg-general-sm .btn{
-      padding:8px 12px !important;
-      font-size:.86rem !important;
-      border-radius:12px !important;
-    }
-
-    /* Water bubble buttons */
-    .lg-bubble-btn{
-      position:relative;
-      background:rgba(190,18,60,.10);
-      border:2px solid rgba(190,18,60,.28);
-      color:var(--leopards-red);
-      font-weight:1000;
-      letter-spacing:.4px;
-      box-shadow:
-        0 10px 18px rgba(190,18,60,.12),
-        inset 0 1px 0 rgba(255,255,255,.65);
+    .progress-bar{
+      height:14px;
+      background:rgba(255,255,255,0.08);
+      border-radius:20px;
       overflow:hidden;
-      cursor:pointer;
-    }
-    .lg-bubble-btn::after{
-      content:'';
-      position:absolute;
-      top:-18px;
-      left:14px;
-      width:46px;
-      height:46px;
-      background:rgba(255,255,255,.45);
-      border-radius:999px;
-      filter:blur(1px);
-      transform:rotate(12deg);
-      pointer-events:none;
-    }
-    .lg-bubble-btn:hover{
-      filter:brightness(.98);
     }
 
-    @media (max-width: 980px){
-      .sidebar{ width:250px; }
-      header{ padding:16px 18px; }
-      .page{ padding:22px 16px; }
-      .grid-2{ grid-template-columns:1fr; }
-      .nav-item.sub{ padding-left:34px; }
+    .progress-fill{
+      height:100%;
+      border-radius:20px;
+      background:linear-gradient(90deg,#00d2ff,#3a7bd5);
     }
 
-    /* Mobile/tablet: shrink product/emp/shift scan UI + show mobile center actions */
-    @media (max-width: 980px){
-      .page{ padding:16px 12px 20px; }
-      #main-display h2{ font-size:1.35rem; }
-      #main-display h3{ font-size:.92rem; margin-bottom:14px; }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:20px;
+    }
 
-      /* Inputs/selects in lg/lc sections (actual IDs exist in markup) */
-      #main-display input.search-input,
-      #main-display select.search-input{
-        padding:7px 10px !important;
-        font-size:.76rem !important;
-        border-radius:10px !important;
+    table th,
+    table td{
+      padding:14px;
+      text-align:left;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+    }
+
+    table th{
+      color:#ffcb52;
+      font-weight:600;
+    }
+
+    .status{
+      padding:6px 14px;
+      border-radius:20px;
+      font-size:12px;
+      display:inline-block;
+    }
+
+    .active-status{
+      background:#00c89633;
+      color:#00ffbf;
+    }
+
+    .pending-status{
+      background:#ffb70033;
+      color:#ffcc00;
+    }
+
+    .print-sheet{
+      display:none;
+    }
+
+    @media print{
+      body{
+        display:block;
+        background:white !important;
+        color:#111 !important;
       }
 
-      /* Labels / hint text (works everywhere inside main-display) */
-      #main-display .hint{
-        font-size:.78rem !important;
-        margin-bottom:6px !important;
-      }
-
-      /* Table */
-      #main-display .oms-table th,
-      #main-display .oms-table td{
-        padding:9px 10px !important;
-        font-size:.76rem !important;
-      }
-
-      /* Mobile buttons (shrink generally inside main) */
-      #main-display .btn{
-        padding:8px 12px !important;
-        font-size:.82rem !important;
-        border-radius:12px !important;
-      }
-
-      /* Mobile-only center actions row */
-      .lg-mobile-actions{
-        display:flex !important;
-      }
-      .lg-desktop-only{
+      body::before,
+      body::after,
+      .sidebar,
+      .main > :not(.print-sheet){
         display:none !important;
+      }
+
+      .print-sheet{
+        display:block !important;
+        color:#111;
+        font-family:Arial,sans-serif;
+        padding:10px;
+      }
+
+      .print-sheet h1{
+        font-size:20px;
+        text-align:center;
+        margin:0 0 12px 0;
+      }
+
+      .print-meta{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:6px 18px;
+        font-size:12px;
+        margin-bottom:12px;
+      }
+
+      .print-sheet table{
+        width:100%;
+        border-collapse:collapse;
+        margin-top:0;
+        font-size:11px;
+      }
+
+      .print-sheet th,
+      .print-sheet td{
+        border:1px solid #222;
+        color:#111;
+        padding:6px;
+        vertical-align:middle;
+      }
+
+      .print-sheet th{
+        background:#eee;
+        font-weight:bold;
+      }
+
+      .print-barcode{
+        width:190px;
+        height:46px;
+        display:block;
+      }
+    }
+
+    @media(max-width:950px){
+      .sidebar {
+        position:relative;
+        width:100%;
+        min-height:auto;
+      }
+
+      body{
+        flex-direction:column;
+        padding: 0;
+      }
+
+      .main{
+        margin-left:0;
+        width:100%;
+      }
+    }
+    
+    .sidebar {
+      left: 0;
+    }
+
+    @media(max-width:650px){
+      .topbar h1{
+        font-size:26px;
+      }
+
+      .search-box{
+        width:100%;
       }
     }
   </style>
 </head>
-
 <body>
-<div class="app">
-  <aside class="sidebar">
-    <div class="logo">OMS 2.0 <small>OPERATIONS SYSTEM</small></div>
 
-    <div class="nav" id="navRoot">
-      <div class="nav-section-title">Menu</div>
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">☰</div>
+      <h2>Operations</h2>
+    </div>
 
-      <div class="nav-item active" data-tab="Home" role="button" tabindex="0">HOME</div>
+    <div class="menu-title">Main Menu</div>
 
-      <div class="nav-group" data-group="Debriefing">
-        <div class="nav-group-header" role="button" tabindex="0" onclick="window.__oms.toggleGroup(this)">
-          DEBRIEFING <span class="chev">▼</span>
-        </div>
-        <div class="sub-menu">
-          <div class="nav-item sub" data-tab="Debriefing" role="button" tabindex="0">DASHBOARD</div>
-          <div class="nav-item sub" data-tab="Debriefing-Add Pending" role="button" tabindex="0">ADD PENDING</div>
-          <div class="nav-item sub" data-tab="Debriefing-Add Delivered" role="button" tabindex="0">ADD DELIVERED</div>
-          <div class="nav-item sub" data-tab="Debriefing-Delete Status" role="button" tabindex="0">DELETE STATUS</div>
+    <div class="menu" id="sidebarMenu">
+      <a class="accordion-link" href="#" style="margin-top:0;">🏠 HOME</a>
+
+      <div class="accordion-item">
+        <button class="accordion-btn" type="button" data-toggle="section" aria-expanded="false">
+          <div class="accordion-label">🗂️ <span>DEBRIEFING</span></div>
+        </button>
+        <div class="accordion-content" role="region">
+          <a class="accordion-link" href="#" data-page="add-pending">ADD PENDING</a>
+          <a class="accordion-link" href="#" data-page="add-delivered">ADD DELIVERED</a>
+          <a class="accordion-link" href="#" data-page="delete-status">DELETE STATUS</a>
         </div>
       </div>
 
-      <div class="nav-group" data-group="Leopards">
-        <div class="nav-group-header" role="button" tabindex="0" onclick="window.__oms.toggleGroup(this)">
-          LEOPARDS <span class="chev">▼</span>
-        </div>
-        <div class="sub-menu">
-          <div class="nav-item sub" data-tab="Leopards-General" role="button" tabindex="0">LEOPARDS DSE - GENERAL</div>
-          <div class="nav-item sub" data-tab="Leopards-COD Shift" role="button" tabindex="0">LEOPARDS DSE - COD SHIFT</div>
-          <div class="nav-item sub" data-tab="Leopards-OSA" role="button" tabindex="0">LEOPARDS DSE - OSA</div>
-          <div class="nav-item sub" data-tab="Leopards-Upfront Rider" role="button" tabindex="0">LEOPARDS DSE - UPFRONT RIDER</div>
+      <div class="accordion-item">
+        <button class="accordion-btn" type="button" data-toggle="section" aria-expanded="false">
+          <div class="accordion-label">🐆 <span>LEOPARDS</span></div>
+        </button>
+        <div class="accordion-content" role="region">
+          <a class="accordion-link" href="#" data-page="forward-desk">FORWARD DESK</a>
         </div>
       </div>
 
-      <div class="nav-group" data-group="Inter Transfer">
-        <div class="nav-group-header" role="button" tabindex="0" onclick="window.__oms.toggleGroup(this)">
-          INTER TRANSFER <span class="chev">▼</span>
-        </div>
-        <div class="sub-menu">
-          <div class="nav-item sub" data-tab="Inter Transfer" role="button" tabindex="0">MANAGE TRANSFERS</div>
-          <div class="nav-item sub" data-tab="Inter Transfer-RTN" role="button" tabindex="0">INTER TRANSFER - RTN</div>
+      <div class="accordion-item">
+        <button class="accordion-btn" type="button" data-toggle="section" aria-expanded="false">
+          <div class="accordion-label">✅ <span>SHEET VERIFICATION</span></div>
+        </button>
+        <div class="accordion-content" role="region"></div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-btn" type="button" data-toggle="section" aria-expanded="false">
+          <div class="accordion-label">📊 <span>REPORTS</span></div>
+        </button>
+        <div class="accordion-content" role="region">
+          <a class="accordion-link" href="#" data-page="forward-report">FORWARD REPORT</a>
         </div>
       </div>
 
-      <div class="nav-item" data-tab="Return to Shipper DSE" role="button" tabindex="0">RETURN TO SHIPPER DSE</div>
-      <div class="nav-item" data-tab="Rider Mobile Shipments" role="button" tabindex="0">RIDER MOBILE SHIPMENTS</div>
-      <div class="nav-item" data-tab="Mobile API Log" role="button" tabindex="0">MOBILE API LOG</div>
-      <div class="nav-item" data-tab="Update Missing Signs" role="button" tabindex="0">UPDATE MISSING SIGNS</div>
-      <div class="nav-item" data-tab="Realtime Activity" role="button" tabindex="0">REALTIME ACTIVITY</div>
-      <div class="nav-item" data-tab="Control Tower" role="button" tabindex="0">CONTROL TOWER</div>
-      <div class="nav-item" data-tab="Sheet Verification" role="button" tabindex="0">SHEET VERIFICATION</div>
-
-      <div class="nav-group" data-group="Reports">
-        <div class="nav-group-header" role="button" tabindex="0" onclick="window.__oms.toggleGroup(this)">
-          REPORTS <span class="chev">▼</span>
-        </div>
-        <div class="sub-menu">
-          <div class="nav-item sub" data-tab="Reports-Debriefing Report" role="button" tabindex="0">DEBRIEFING REPORT</div>
-          <div class="nav-item sub" data-tab="Reports-Assign Runsheet" role="button" tabindex="0">ASSIGN RUNSHEET</div>
-          <div class="nav-item sub" data-tab="Reports-Proof of Delivery" role="button" tabindex="0">PROOF OF DELIVERY</div>
-          <div class="nav-item sub" data-tab="Reports-OSA Assign Report" role="button" tabindex="0">OSA ASSIGN REPORT</div>
-          <div class="nav-item sub" data-tab="Reports-Missing Signatures" role="button" tabindex="0">MISSING SIGNATURES</div>
-          <div class="nav-item sub" data-tab="Reports-Missing Geo Coords" role="button" tabindex="0">MISSING GEO COORDS</div>
-          <div class="nav-item sub" data-tab="Reports-Transport Mode Report" role="button" tabindex="0">TRANSPORT MODE REPORT</div>
-          <div class="nav-item sub" data-tab="Reports-Shipper Advice Report" role="button" tabindex="0">SHIPPER ADVICE REPORT</div>
-          <div class="nav-item sub" data-tab="Reports-CN Booking Detail" role="button" tabindex="0">CN BOOKING DETAIL</div>
-          <div class="nav-item sub" data-tab="Reports-Sheet Verification" role="button" tabindex="0">SHEET VERIFICATION</div>
-          <div class="nav-item sub" data-tab="Reports-DR Server" role="button" tabindex="0">DR Server</div>
-          <div class="nav-item sub" data-tab="Reports-Runsheet Archive By CNs" role="button" tabindex="0">RUNSHEET ARCHIVE BY CNs</div>
-          <div class="nav-item sub" data-tab="Reports-Realtime Activity" role="button" tabindex="0">REALTIME ACTIVITY</div>
-          <div class="nav-item sub" data-tab="Reports-Runsheet Archive" role="button" tabindex="0">RUNSHEET ARCHIVE</div>
-          <div class="nav-item sub" data-tab="Reports-Online Assign Graph" role="button" tabindex="0">ONLINE ASSIGN GRAPH</div>
-          <div class="nav-item sub" data-tab="Reports-Online History Trend" role="button" tabindex="0">ONLINE HISTORY TREND</div>
-          <div class="nav-item sub" data-tab="Reports-QSR As Of Date" role="button" tabindex="0">QSR - AS OF DATE</div>
-          <div class="nav-item sub" data-tab="Reports-Live Field Summary" role="button" tabindex="0">LIVE FIELD SUMMARY</div>
+      <div class="accordion-item">
+        <button class="accordion-btn" type="button" data-toggle="section" aria-expanded="false">
+          <div class="accordion-label">🧾 <span>SUMMARY</span></div>
+        </button>
+        <div class="accordion-content" role="region">
+          <a class="accordion-link" href="#" data-page="assign-summary">ASSIGN SUMMARY REPORT</a>
         </div>
       </div>
 
-      <div class="nav-group" data-group="Summary">
-        <div class="nav-group-header" role="button" tabindex="0" onclick="window.__oms.toggleGroup(this)">
-          SUMMARY <span class="chev">▼</span>
-        </div>
-        <div class="sub-menu">
-          <div class="nav-item sub" data-tab="Summary-Performance" role="button" tabindex="0">PERFORMANCE SUMMARY</div>
-          <div class="nav-item sub" data-tab="Summary-Mobile Delivery" role="button" tabindex="0">MOBILE DELIVERY</div>
-          <div class="nav-item sub" data-tab="Summary-Performance Assign" role="button" tabindex="0">PERFORMANCE ASSIGN SUMMARY</div>
-          <div class="nav-item sub" data-tab="Summary-Balancesheet" role="button" tabindex="0">BALANCESHEET</div>
-          <div class="nav-item sub" data-tab="Summary-E2E" role="button" tabindex="0">E2E SUMMARY</div>
-          <div class="nav-item sub" data-tab="Summary-Hub Balance" role="button" tabindex="0">HUB BALANCE</div>
-          <div class="nav-item sub" data-tab="Summary-OSA" role="button" tabindex="0">OSA SUMMARY</div>
-          <div class="nav-item sub" data-tab="Summary-Overall" role="button" tabindex="0">OVERALL SUMMARY</div>
-          <div class="nav-item sub" data-tab="Summary-Data Upload" role="button" tabindex="0">DATA UPLOAD REPORT</div>
-        </div>
-      </div>
-
-      <div class="nav-group" data-group="Setup">
-        <div class="nav-group-header" role="button" tabindex="0" onclick="window.__oms.toggleGroup(this)">
-          SETUP <span class="chev">▼</span>
-        </div>
-        <div class="sub-menu">
-          <div class="nav-item sub" data-tab="Setup-Users" role="button" tabindex="0">USERS</div>
-          <div class="nav-item sub" data-tab="Setup-Riders" role="button" tabindex="0">RIDERS</div>
+      <div class="accordion-item">
+        <button class="accordion-btn" type="button" data-toggle="section" aria-expanded="false">
+          <div class="accordion-label">🧰 <span>SETUP</span></div>
+          <div class="chev">▼</div>
+        </button>
+        <div class="accordion-content" role="region">
+          <a class="accordion-link" href="#" data-page="rider-setup">RIDER SETUP</a>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="sidebar-footer">© 2017 Leopards (Pvt.) Ltd.</div>
-  </aside>
+  <div class="main">
 
-  <main class="main">
-    <header>
-      <div class="user-info">
-        <div>Logged in user: <strong id="userName">ayaz</strong></div>
-        <div>Station: <strong id="stationName">Attock (00035)</strong></div>
+    <div class="topbar">
+      <h1>Operations Management System</h1>
+
+      <div class="search-box">
+        <input type="text" placeholder="Search dashboard...">
       </div>
-      <div class="header-right">
-        <span class="expiry-tag">Password Expiry: 13-May-2026</span>
-        <span class="current-datetime" id="current-datetime"></span>
-      </div>
-    </header>
-
-    <section class="page" id="main-display"></section>
-
-    <div style="padding:12px 28px;border-top:1px solid var(--border-light);background:#fff;display:flex;justify-content:flex-end;">
-      <span style="color:#64748b;font-weight:700;">
-        Leopards (Pvt.) Ltd. © 2017 |
-        <a href="https://leopardsoms.pk" style="color:var(--leopards-red);text-decoration:none;">leopardsoms.pk</a>
-      </span>
     </div>
-  </main>
-</div>
 
-<script>
-  // Global namespace to avoid polluting window
-  window.__oms = window.__oms || {};
-
-  // ---------------- Mock Data ----------------
-    window.__oms.state = {
-    exceptions: [
-      { id:'1', shipmentId:'AT10293840', reason:'Address Incomplete', status:'Urgent' },
-      { id:'2', shipmentId:'AT10293850', reason:'Customer Refused', status:'Urgent' },
-      { id:'3', shipmentId:'AT10293860', reason:'Vehicle Breakdown', status:'Urgent' },
-      { id:'4', shipmentId:'AT10293841', reason:'Address Incomplete', status:'Urgent' },
-      { id:'5', shipmentId:'AT10293851', reason:'Customer Refused', status:'Urgent' },
-      { id:'6', shipmentId:'AT10293861', reason:'Vehicle Breakdown', status:'Urgent' }
-    ],
-    runSheets: [
-      { id:'RS-001', courier:'Zahid Khan', total:45, delivered:40, status:'Pending' },
-      { id:'RS-002', courier:'Imran Ali', total:30, delivered:30, status:'Closed' },
-      { id:'RS-003', courier:'Ali Raza', total:50, delivered:48, status:'Pending' },
-      { id:'RS-004', courier:'Kamran Khan', total:35, delivered:32, status:'Pending' }
-    ],
-
-    // Setup → Riders (persisted)
-    riders: [
-      // مثال (آپ چاہیں تو بعد میں remove کر دیں)
-      // { empNo:'1001', riderId:'R1001', name:'Demo Rider', empType:'COURIER', cnic:'', mobile:'', phone:'', status:'ACTIVE', birthDate:'2026-05-07', joinDate:'2026-05-07', leftDate:'', leftReason:'', address:'' }
-    ],
-
-    // LEOPARDS “new shipment details” (in-memory demo storage)
-    leopardsDseGeneralRows: [],
-    leopardsDseCodShiftRows: []
-  };
-
-  // ---------------- Helpers ----------------
-  __oms.byId = (id) => document.getElementById(id);
-
-  __oms.escape = (v) => String(v ?? '');
-
-  __oms.updateDateTime = () => {
-    const now = new Date();
-    const options = { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' };
-    __oms.byId('current-datetime').textContent = now.toLocaleDateString('en-US', options);
-  };
-
-  __oms.toggleGroup = (el) => {
-    const group = el.closest('.nav-group');
-    if (!group) return;
-    group.classList.toggle('open');
-  };
-
-  __oms.setActiveNav = (tab) => {
-    document.querySelectorAll('.nav-item').forEach(el => {
-      const elTab = el.getAttribute('data-tab');
-      el.classList.toggle('active', elTab === tab);
-    });
-  };
-
-  __oms.switchTab = (tabName) => {
-    __oms.setActiveNav(tabName);
-
-    const display = __oms.byId('main-display');
-    const render = __oms.pages[tabName] || (() => __oms.renderGenericPlaceholder(tabName, "This module is currently under development or configuration."));
-    display.innerHTML = render();
-    // After re-render, attach page-level handlers safely
-    __oms.hydratePage(tabName);
-  };
-
-  // Status pill
-  __oms.renderStatusPill = (status) => {
-    const s = String(status || '').toLowerCase();
-    const cls =
-      s === 'urgent' ? 'urgent' :
-      s === 'acknowledged' ? 'acknowledged' :
-      s === 'pending' ? 'pending' :
-      s === 'closed' ? 'closed' :
-      s === 'verified' ? 'verified' : 'pending';
-    return `<span class="status-pill ${cls}">${__oms.escape(status)}</span>`;
-  };
-
-  __oms.renderGenericPlaceholder = (title, description) => {
-    return `<div class="placeholder"><h2 style="font-size:1.35rem;margin-bottom:10px;color:var(--text-main);">${__oms.escape(title)}</h2><p style="color:var(--text-secondary);font-weight:650;">${__oms.escape(description)}</p></div>`;
-  };
-
-  // ---------------- Pages ----------------
-  __oms.pages = {
-    Home: () => {
-      const urgentCount = __oms.state.exceptions.filter(e => e.status === 'Urgent').length;
-      const metrics = `
-        <div class="card metric">
-          <h4>Active Couriers</h4>
-          <div class="value">18</div>
-        </div>
-        <div class="card metric">
-          <h4>Deliveries Today</h4>
-          <div class="value">450</div>
-        </div>
-        <div class="card metric">
-          <h4>Success Rate</h4>
-          <div class="value">94%</div>
-        </div>
-        <div class="card metric">
-          <h4>Urgent Exceptions</h4>
-          <div class="value">${urgentCount}</div>
-        </div>
-      `;
-      return `
-        <h2>Home Dashboard</h2>
-        <h3>Operational Overview</h3>
-        <div class="metrics-grid">${metrics}</div>
-        <div class="placeholder" style="text-align:left;">
-          <h2 style="font-size:1.25rem;color:var(--text-main);margin-bottom:8px;">Welcome to Leopards OMS 2.0</h2>
-          <p class="hint">
-            Station: <strong style="color:var(--text-main);">${__oms.escape(document.getElementById('stationName').textContent)}</strong>.
-            Authorized access only. Use the operations menu to book new shipments or manage manifests.
-          </p>
-        </div>
-      `;
-    },
-
-    Debriefing: () => {
-      const runSheetsRows = __oms.state.runSheets.map(rs => `
-        <tr>
-          <td style="font-weight:900;">${__oms.escape(rs.id)}</td>
-          <td>${__oms.escape(rs.courier)}</td>
-          <td style="font-weight:900;">${rs.delivered}/${rs.total}</td>
-          <td>${__oms.renderStatusPill(rs.status === 'Closed' ? 'Closed' : 'Pending')}</td>
-          <td>
-            ${rs.status === 'Pending'
-              ? `<button class="btn btn-primary" data-action="close-sheet" data-id="${__oms.escape(rs.id)}">Close Sheet</button>`
-              : `<button class="btn btn-muted" data-action="view-sheet" data-id="${__oms.escape(rs.id)}">View</button>`
-            }
-          </td>
-        </tr>
-      `).join('');
-
-      return `
-        <h2>Debriefing - Run Sheet Closure</h2>
-        <h3>Update shipment statuses and close daily courier run sheets.</h3>
-
-        <div class="row">
-          <div style="flex:1;min-width:260px;">
-            <input class="search-input" id="runSheetSearch" placeholder="Search Run Sheet ID (e.g., RS-001)..." />
+      <div id="panel-add-pending" style="display:none;">
+        <h2 style="margin:0 0 14px 0;">UN-DELIVERED SHIPMENTS - DEBRIEFING (CN SCAN)</h2>
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);border-radius:18px;padding:14px;margin-bottom:14px;">
+          <div style="display:grid;grid-template-columns:180px 1fr;gap:10px;align-items:end;">
+            <div>
+              <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;font-weight:900;">Assign Date</div>
+              <input id="pendingDateFilter" type="date" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px 12px;color:white;outline:none;font-weight:800;" />
+            </div>
           </div>
+        </div>
+
+        <!-- Top meta (Counter right + Route code/Leopard name top-left) -->
+        <div style="display:grid;grid-template-columns:1fr 160px;gap:12px;margin-bottom:12px;align-items:start;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div>
+              <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;">Route Code</div>
+              <input id="txtCourier" type="text" maxlength="5" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px 12px;color:white;outline:none;" placeholder="Route Code" />
+            </div>
+
+            <div>
+              <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;">Leopard Name</div>
+              <input id="txtCourName" type="text" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px 12px;color:white;outline:none;" placeholder="Leopard Name" disabled="disabled" />
+            </div>
+          </div>
+
           <div>
-            <button class="btn btn-primary" id="clearRunSheet" style="background:#be123c;">Clear</button>
+            <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;text-align:center;font-weight:800;">COUNTER</div>
+            <div style="width:150px;height:150px;border-radius:999px;margin:0 auto;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;">
+              <input id="txtCounter" type="text" value="0" style="width:100%;padding:0;border:0;background:transparent;color:white;outline:none;text-align:center;font-weight:900;font-size:42px;" disabled />
+            </div>
           </div>
         </div>
 
-        <table class="oms-table">
-          <thead>
-            <tr>
-              <th>Run Sheet ID</th>
-              <th>Courier</th>
-              <th>Load</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="runsheet-table-body">${runSheetsRows}</tbody>
-        </table>
-      `;
-    },
-
-    "Realtime Activity": () => `
-      <h2>Realtime Activity Monitoring</h2>
-      <h3>Live Tracking & Metrics</h3>
-      <div class="metrics-grid">
-        <div class="card metric"><h4>In Field</h4><div class="value">12</div></div>
-        <div class="card metric"><h4>Delays</h4><div class="value">2</div></div>
-        <div class="card metric"><h4>Delivered</h4><div class="value">142</div></div>
-      </div>
-      <div class="placeholder" style="height:320px;display:flex;align-items:center;justify-content:center;">
-        <p style="font-weight:900;color:var(--text-secondary);">[ Real-time GPS Map Visualization & Courier Status ]</p>
-      </div>
-    `,
-
-    "Control Tower": () => {
-      const rows = __oms.state.exceptions.map(ex => `
-        <tr class="${ex.status === 'Urgent' ? 'urgent-row' : ''}">
-          <td><strong>${__oms.escape(ex.shipmentId)}</strong></td>
-          <td>${__oms.escape(ex.reason)}</td>
-          <td>${__oms.renderStatusPill(ex.status)}</td>
-          <td>
-            ${ex.status === 'Urgent'
-              ? `<button class="btn btn-primary" data-action="acknowledge" data-id="${__oms.escape(ex.id)}">Acknowledge</button>`
-              : `<button class="btn btn-muted" data-action="view-exception" data-id="${__oms.escape(ex.id)}">View</button>`
-            }
-          </td>
-        </tr>
-      `).join('');
-
-      return `
-        <h2>Control Tower - Exceptions & Escalations</h2>
-        <h3>Central hub for monitoring performance exceptions and handling urgent issues.</h3>
-
-        <div class="row">
-          <div style="flex:1;min-width:260px;">
-            <input class="search-input" id="shipmentSearch" placeholder="Search Shipment ID (e.g., AT10293840)..." />
-          </div>
+      <!-- CN only (route code/leopard name top-left se aata hai) -->
+      <div style="margin-bottom:12px;">
+        <div style="display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:12px;">
           <div>
-            <button class="btn btn-primary" id="clearShipment" style="background:#be123c;">Clear</button>
+            <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;">Consignment # (CN)</div>
+            <input id="txtCn" type="text" style="width:100%;padding:12px;border-radius:14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);color:white;outline:none;font-size:18px;font-weight:bold;" placeholder="Scan / Enter CN" />
           </div>
         </div>
-
-        <table class="oms-table">
-          <thead>
-            <tr>
-              <th>Shipment ID</th>
-              <th>Reason</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="exception-table-body">${rows}</tbody>
-        </table>
-      `;
-    },
-
-    "Sheet Verification": () => `
-      <h2>Sheet Verification</h2>
-      <h3>Validation of courier run sheets and delivery records to prevent documentation errors.</h3>
-      <div class="placeholder" style="text-align:left;">
-        <h2 style="font-size:1.1rem;color:var(--text-main);margin-bottom:8px;">No sheets pending</h2>
-        <p class="hint">No sheets pending for manual verification at this moment.</p>
       </div>
-    `,
 
-    "Debriefing-Add Pending": () => {
-      const today = new Date().toISOString().split('T')[0];
-      return `
-        <h2>Debriefing: Pending Returns Scan</h2>
-        <h3>RIDER RETURN DEBRIEFING</h3>
+      <!-- Status/Origin/Destination -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+        <div>
+          <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;">Origin</div>
+          <select id="cmbOrigin" style="width:100%;padding:12px;border-radius:14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);color:white;">
+            <option value="">Select Origin</option>
+          </select>
+        </div>
+        <div>
+          <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;">Destination</div>
+          <select id="cmbDest" style="width:100%;padding:12px;border-radius:14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);color:white;">
+            <option value="">Select Destination</option>
+          </select>
+        </div>
+      </div>
 
-        <div class="card" style="padding:18px;">
-          <div class="grid-2">
-            <div>
-              <label class="hint" style="display:block;margin-bottom:8px;color:#9f1239;font-weight:900;text-transform:uppercase;font-size:.78rem;">Station</label>
-              <input class="search-input" value="ATTOCK" disabled />
-            </div>
-            <div>
-              <label class="hint" style="display:block;margin-bottom:8px;color:#9f1239;font-weight:900;text-transform:uppercase;font-size:.78rem;">Date</label>
-              <input class="search-input" type="date" value="${today}" />
-            </div>
-            <div>
-              <label class="hint" style="display:block;margin-bottom:8px;color:#9f1239;font-weight:900;text-transform:uppercase;font-size:.78rem;">Emp #</label>
-              <input class="search-input" placeholder="Rider ID" />
-            </div>
-            <div>
-              <label class="hint" style="display:block;margin-bottom:8px;color:#9f1239;font-weight:900;text-transform:uppercase;font-size:.78rem;">Emp Name</label>
-              <input class="search-input" placeholder="Rider Name" />
-            </div>
-          </div>
+      <!-- Group / Child / Robo -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px;">
+        <div>
+          <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;">Group Status</div>
+          <select id="cmbGroup" style="width:100%;padding:12px;border-radius:14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);color:white;">
+            <option value="">- Select Group -</option>
+          </select>
+        </div>
+        <div>
+          <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;">Child Status</div>
+          <select id="cmbChild" style="width:100%;padding:12px;border-radius:14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);color:white;">
+            <option value="">- Select Child -</option>
+          </select>
+        </div>
+        <div>
+          <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;">Preffered Date</div>
+          <input id="collect_date" type="text" style="width:100%;padding:12px;border-radius:14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);color:white;outline:none;text-align:center;font-weight:700;" disabled />
+        </div>
+        <div>
+          <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;">Preffered Time (24:00)</div>
+          <input id="txtPendTime" type="text" placeholder="HH:MM" style="width:100%;padding:12px;border-radius:14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);color:white;outline:none;text-align:center;font-weight:700;" />
+        </div>
+      </div>
 
-          <div style="margin-top:18px;background:#fff5f5;border:2px dashed #feb2b2;border-radius:14px;padding:18px;text-align:center;">
-            <div class="hint" style="color:#c53030;font-weight:950;text-transform:uppercase;font-size:.92rem;">Scan Returned Shipment (CN#)</div>
-            <input class="search-input" id="cnReturnScan" placeholder="SCAN CN HERE..." style="margin-top:10px;font-size:1.2rem;text-align:center;border-color:#fc8181;" />
-          </div>
+      <!-- Status / Action (make visible - no white fade) -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px;">
+        <div>
+          <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;">Status</div>
+          <select id="cmbStatus" style="width:100%;padding:12px;border-radius:14px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.12);color:white;font-weight:800;">
+            <option value="">- Select -</option>
+            <option value="PN" style="color:#ffea00;">PENDING</option>
+            <option value="NR" style="color:#00ffbf;">READY FOR RETURN</option>
+          </select>
+        </div>
 
-          <div style="margin-top:18px;padding-top:16px;border-top:1px solid #f1f5f9;">
-            <div class="grid-2">
-              ${[
-                ["Group Status","select","-SELECT-"],
-                ["Child Status","select","-SELECT-"],
-                ["Robo Resp","text",""],
-                ["Way Forward","text",""],
-                ["Status","select","-SELECT-"],
-                ["Preferred Date","date",""],
-                ["Attempt Time","time",""],
-                ["Address","text",""]
-              ].map(([label,type,placeholder]) => `
-                <div>
-                  <label class="hint" style="display:block;margin-bottom:8px;color:var(--text-secondary);font-weight:900;text-transform:uppercase;font-size:.78rem;">${label}</label>
-                  ${
-                    type === 'select'
-                      ? `<select class="search-input"><option value="">${placeholder}</option></select>`
-                      : `<input class="search-input" type="${type}" ${placeholder ? `placeholder="${placeholder}"` : ''} />`
-                  }
-                </div>
-              `).join('')}
-            </div>
+        <div>
+          <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;">Action</div>
+          <select id="cmbAction" style="width:100%;padding:12px;border-radius:14px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.12);color:white;font-weight:800;">
+            <option value="">-Select-</option>
+            <option value="1" style="color:#00d2ff;">NEXT DAY</option>
+            <option value="2" style="color:#ff7a00;">RETURNED TO SHIPPER</option>
+          </select>
+        </div>
 
-            <div style="margin-top:18px;display:flex;justify-content:flex-end;">
-              <button class="btn btn-primary" style="background:var(--leopards-red);padding:14px 42px;border-radius:14px;letter-spacing:1px;box-shadow:0 10px 15px -3px rgba(190,18,60,.20);">
-                UPLOADING..!
-              </button>
-            </div>
+        <div>
+          <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;">Robo Resp.</div>
+          <input id="robo_msg" type="text" style="width:100%;padding:12px;border-radius:14px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.12);color:white;outline:none;text-align:center;font-weight:900;" disabled />
+        </div>
+
+        <div>
+          <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;">Ship Wayforward</div>
+          <input id="matech_msg" type="text" style="width:100%;padding:12px;border-radius:14px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.12);color:white;outline:none;text-align:center;font-weight:900;" disabled />
+        </div>
+      </div>
+
+      <!-- Leopard Assign + Upload Pending / Successful -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0 14px 0;">
+        <div>
+          <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);border-radius:14px;padding:14px 14px;">
+            <div style="font-size:13px;color:#7ea5cf;font-weight:900;margin-bottom:10px;text-align:center;">LEOPARD ASSIGN</div>
+            <div id="assign_slot" style="height:44px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.20);border:1px solid rgba(255,255,255,0.08);border-radius:14px;color:#fff;font-weight:900;">-</div>
           </div>
         </div>
 
-        <div style="margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:18px;">
-          <div class="card" style="padding:0;overflow:hidden;">
-            <div style="padding:14px 16px;border-left:4px solid var(--leopards-red);display:flex;justify-content:space-between;align-items:center;">
-              <div style="font-weight:950;color:var(--text-main);">INPROGRESS & UN-DELIVERED (Mobile APP)</div>
-              <div class="hint">Count: <strong style="color:var(--leopards-red);">0</strong></div>
-            </div>
-            <div style="padding:12px 16px 18px;">
-              <div class="hint" style="font-style:italic;color:var(--text-muted);text-align:center;padding:26px 0;">No Data</div>
-            </div>
-          </div>
-
-          <div class="card" style="padding:0;overflow:hidden;">
-            <div style="padding:14px 16px;border-left:4px solid #22c55e;display:flex;justify-content:space-between;align-items:center;">
-              <div style="font-weight:950;color:var(--text-main);">UPDATED - DEBRIEFING</div>
-              <div class="hint">Count: <strong style="color:#22c55e;">0</strong></div>
-            </div>
-            <div style="padding:12px 16px 18px;">
-              <div class="hint" style="font-style:italic;color:var(--text-muted);text-align:center;padding:26px 0;">No Data</div>
+        <div>
+          <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);border-radius:14px;padding:14px 14px;">
+            <div style="font-size:13px;color:#7ea5cf;font-weight:900;margin-bottom:10px;text-align:center;">UPLOAD PENDING / SUCCESSFUL</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+              <button class="card-btn" type="button" style="background:rgba(255,255,255,0.12);padding:10px 16px;font-weight:900;">Upload</button>
+              <button id="btnUploadDone" class="card-btn" type="button" style="background:rgba(0,255,191,0.12);padding:10px 16px;font-weight:900;">Successful</button>
             </div>
           </div>
         </div>
-      `;
-    },
+      </div>
 
-    "Debriefing-Add Delivered": () => {
-      const today = new Date().toISOString().split('T')[0];
-      return `
-        <h2>Rider Delivery Debriefing (Delivered Scan)</h2>
-        <h3>RIDER DEBRIEFING - DELIVERED SCAN</h3>
-
-        <div class="card" style="padding:18px;">
-          <div class="grid-2">
-            <div>
-              <label class="hint" style="display:block;margin-bottom:8px;color:var(--text-secondary);font-weight:900;text-transform:uppercase;font-size:.78rem;">Station</label>
-              <input class="search-input" value="ATTOCK" disabled />
-            </div>
-            <div>
-              <label class="hint" style="display:block;margin-bottom:8px;color:var(--text-secondary);font-weight:900;text-transform:uppercase;font-size:.78rem;">Delivery Date</label>
-              <input class="search-input" type="date" value="${today}" />
-            </div>
-            <div>
-              <label class="hint" style="display:block;margin-bottom:8px;color:var(--text-secondary);font-weight:900;text-transform:uppercase;font-size:.78rem;">Rider / Emp #</label>
-              <input class="search-input" placeholder="Scan ID Card" />
-            </div>
-            <div>
-              <label class="hint" style="display:block;margin-bottom:8px;color:var(--text-secondary);font-weight:900;text-transform:uppercase;font-size:.78rem;">Rider Name</label>
-              <input class="search-input" placeholder="Verified Name" />
-            </div>
-          </div>
-
-          <div style="margin-top:18px;background:#f0fdf4;border:2px dashed #86efac;border-radius:14px;padding:18px;text-align:center;">
-            <div class="hint" style="color:#166534;font-weight:950;text-transform:uppercase;font-size:.92rem;">Scan Delivered Shipment (CN#)</div>
-            <input class="search-input" id="cnDeliveredScan" placeholder="SCAN CN HERE..." style="margin-top:10px;font-size:1.2rem;text-align:center;border-color:#4ade80;" />
-          </div>
-
-          <div style="margin-top:18px;padding-top:16px;border-top:1px solid #f1f5f9;">
-            <div class="grid-2">
-              <div>
-                <label class="hint" style="display:block;margin-bottom:8px;color:var(--text-secondary);font-weight:900;text-transform:uppercase;font-size:.78rem;">Receiver Relation</label>
-                <select class="search-input">
-                  <option value="">-- Select Relation --</option>
-                  <option>SELF</option>
-                  <option>FAMILY</option>
-                  <option>STAFF</option>
-                  <option>GUARD</option>
-                  <option>NEIGHBOR</option>
-                </select>
-              </div>
-              <div>
-                <label class="hint" style="display:block;margin-bottom:8px;color:var(--text-secondary);font-weight:900;text-transform:uppercase;font-size:.78rem;">Receiver Name / Contact</label>
-                <input class="search-input" placeholder="Name or Phone..." />
-              </div>
-            </div>
-
-            <div style="margin-top:18px;display:flex;justify-content:flex-end;">
-              <button class="btn btn-primary" style="background:#059669;padding:14px 42px;border-radius:14px;font-size:1.05rem;box-shadow:0 10px 15px -3px rgba(5,150,105,.20);">
-                SAVE DELIVERED SHIPMENT
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div style="margin-top:22px;" class="card">
-          <div style="padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;">
-            <div style="display:flex;align-items:center;gap:10px;font-weight:950;color:var(--text-main);">
-              <span style="background:#059669;color:#fff;padding:4px 10px;border-radius:8px;font-size:.78rem;">SCANNED LIST</span>
-              Successfully Delivered in this Session
-            </div>
-            <div class="hint">Total Delivered: <strong style="color:#059669;">0</strong></div>
-          </div>
-          <div style="padding:18px 16px;">
-            <div class="hint" style="font-style:italic;color:var(--text-muted);text-align:center;padding:26px 0;">
-              No shipments scanned yet. Start scanning to populate this list.
-            </div>
-          </div>
-        </div>
-      `;
-    },
-
-    "Debriefing-Delete Status": () => {
-      return `
-        <h2>Debriefing: Delete Status</h2>
-        <h3>Note: By default, the data will be sorted on 'status datetime' entered by staff.</h3>
-
-        <div class="card" style="padding:18px;margin-top:10px;">
-          <div class="grid-2">
-            <div>
-              <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Search CN</label>
-              <input class="search-input" id="cnSearchInput" placeholder="Enter CN and press Enter..." />
-            </div>
-            <div style="display:flex;align-items:flex-end;">
-              <div class="hint" style="width:100%;color:var(--text-secondary);">Aging (Last AC to RC):</div>
-            </div>
-          </div>
-        </div>
-
-        <div style="margin-top:18px;">
-          <table class="oms-table">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:12px;align-items:start;">
+        <div style="overflow:auto;max-height:320px;">
+          <table style="min-width:520px;">
             <thead>
               <tr>
                 <th>Sr#</th>
-                <th>CN Number</th>
-                <th>Route Date</th>
-                <th>Status Date</th>
-                <th>Status</th>
-                <th>Reason / Receiver (Relation)</th>
-                <th>Action</th>
-                <th>Rout - Officer</th>
-                <th>Station</th>
-                <th>Username</th>
-                <th>Status Updated On</th>
-                <th>Pic</th>
-                <th>Action</th>
+                <th>CN#</th>
+                <th>Leopard Assign</th>
+                <th>Assign Date</th>
               </tr>
             </thead>
-            <tbody id="delete-status-table-body">
-              <tr><td colspan="13" style="text-align:center;padding:40px;color:var(--text-muted);font-weight:750;">No Record..!</td></tr>
+            <tbody id="addPendingAssignRows">
+              <tr><td colspan="4" style="text-align:center;">No data</td></tr>
             </tbody>
           </table>
         </div>
-      `;
-    },
 
-    "Leopards-General": () => {
-      const today = new Date().toISOString().split('T')[0];
-      return `
-        <h2>Leopards DSE - General</h2>
-        <h3>Row small + counter + CN scan + new shipment (Mobile/Print)</h3>
-
-        <div class="card" style="padding:0;margin-top:10px;overflow:hidden;">
-          <div style="padding:14px 16px;border-left:4px solid var(--leopards-red);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
-            <div style="font-weight:950;color:var(--text-main);">Shipment Scan Counter</div>
-            <div class="hint">Scanned: <strong id="lg-scan-counter" style="color:var(--leopards-red);">0</strong></div>
-          </div>
-
-          <div style="padding:16px;">
-            <div class="grid-2" style="row-gap:14px;column-gap:18px;">
-              <div>
-                <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Product</label>
-                <select class="search-input" id="lg-product">
-                  <option value="">-SELECT-</option>
-                  <option value="COD">COD</option>
-                  <option value="GENERAL">GENERAL</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Date</label>
-                <input class="search-input" id="lg-date" type="date" value="${today}" />
-              </div>
-
-              <div>
-                <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">DSE Type</label>
-                <select class="search-input" id="lg-dse-type">
-                  <option value="NORMAL">NORMAL</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Shift</label>
-                <select class="search-input" id="lg-shift">
-                  <option value="SHIFT A">SHIFT A</option>
-                  <option value="SHIFT B">SHIFT B</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Route Code</label>
-                <select class="search-input" id="lg-route-code">
-                  <option value="">-SELECT ROUTE-</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Emp #</label>
-                <input class="search-input" id="lg-emp-no" placeholder="Enter Emp #" />
-              </div>
-
-              <div>
-                <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Emp Name</label>
-                <input class="search-input" id="lg-emp-name" placeholder="Enter Emp Name" />
-              </div>
-
-              <div>
-                <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Old Code</label>
-                <input class="search-input" id="lg-old-code" placeholder="Enter Old Code" />
-              </div>
-            </div>
-
-            <div style="margin-top:14px;border-top:1px solid var(--border-light);padding-top:14px;">
-              <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
-                <div style="flex:1;min-width:240px;">
-                  <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Scan CN#</label>
-                  <input class="search-input" id="lg-scan-input" placeholder="Scan CN here..." />
-                </div>
-
-                <button class="btn btn-primary" id="lg-add-scan-btn" style="background:var(--leopards-red);padding:12px 18px;border-radius:12px;">
-                  ADD
-                </button>
-              </div>
-
-              <!-- Mobile-only center bubble actions -->
-              <div class="lg-mobile-actions" style="display:none;justify-content:center;gap:12px;margin-top:12px;flex-wrap:wrap;">
-                <button class="btn lg-bubble-btn" id="lg-mobile-print-btn" style="padding:12px 18px;border-radius:16px;min-width:130px;" type="button">
-                  PRINT
-                </button>
-                <button class="btn lg-bubble-btn" id="lg-mobile-puch-btn" style="padding:12px 18px;border-radius:16px;min-width:130px;" type="button">
-                  PUCH
-                </button>
-              </div>
-            </div>
-
-            <div style="margin-top:16px;" class="lg-hide-when-empty">
-              <table class="oms-table">
-                <thead>
-                  <tr>
-                    <th style="width:12%;">#</th>
-                    <th>CN#</th>
-                    <th style="width:28%;">Customer</th>
-                    <th style="width:18%;">Amount</th>
-                    <th style="width:16%;">Action</th>
-                  </tr>
-                </thead>
-                <tbody id="lg-scan-table-body">
-                  <tr data-empty="1"><td colspan="5" style="text-align:center;padding:18px;color:var(--text-muted);font-weight:800;">No scans yet</td></tr>
-                </tbody>
-              </table>
-            </div>
-
-              <!-- Customer Name + Amount removed from General section per requirement -->
-          </div>
+        <div style="overflow:auto;max-height:320px;">
+          <table style="min-width:520px;">
+            <thead>
+              <tr>
+                <th>Sr#</th>
+                <th>CN#</th>
+                <th>Status</th>
+                <th>Assign Date</th>
+              </tr>
+            </thead>
+            <tbody id="addPendingStatusRows">
+              <tr><td colspan="4" style="text-align:center;">No data</td></tr>
+            </tbody>
+          </table>
         </div>
-      `;
-    },
-
-    "Leopards-COD Shift": () => {
-      const today = new Date().toISOString().split('T')[0];
-      return `
-        <h2>Leopards DSE - COD Shift</h2>
-        <h3>Row small + counter + CN scan + new shipment (Mobile/Print)</h3>
-
-        <div class="card" style="padding:0;margin-top:10px;overflow:hidden;">
-          <div style="padding:14px 16px;border-left:4px solid var(--leopards-red);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
-            <div style="font-weight:950;color:var(--text-main);">Shipment Scan Counter</div>
-            <div class="hint">Scanned: <strong id="lc-scan-counter" style="color:var(--leopards-red);">0</strong></div>
-          </div>
-
-          <div style="padding:16px;">
-            <div class="grid-2" style="row-gap:14px;column-gap:18px;">
-              <div>
-                <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Product</label>
-                <select class="search-input" id="lc-product">
-                  <option value="">-SELECT-</option>
-                  <option value="COD">COD</option>
-                  <option value="GENERAL">GENERAL</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Date</label>
-                <input class="search-input" id="lc-date" type="date" value="${today}" />
-              </div>
-
-              <div>
-                <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">DSE Type</label>
-                <select class="search-input" id="lc-dse-type">
-                  <option value="NORMAL">NORMAL</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Shift</label>
-                <select class="search-input" id="lc-shift">
-                  <option value="SHIFT A">SHIFT A</option>
-                  <option value="SHIFT B">SHIFT B</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Route Code</label>
-                <select class="search-input" id="lc-route-code">
-                  <option value="">-SELECT ROUTE-</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Emp #</label>
-                <input class="search-input" id="lc-emp-no" placeholder="Enter Emp #" />
-              </div>
-
-              <div>
-                <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Emp Name</label>
-                <input class="search-input" id="lc-emp-name" placeholder="Enter Emp Name" />
-              </div>
-
-              <div>
-                <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Old Code</label>
-                <input class="search-input" id="lc-old-code" placeholder="Enter Old Code" />
-              </div>
-            </div>
-
-            <div style="margin-top:14px;border-top:1px solid var(--border-light);padding-top:14px;">
-              <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
-                <div style="flex:1;min-width:240px;">
-                  <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Scan CN#</label>
-                  <input class="search-input" id="lc-scan-input" placeholder="Scan CN here..." />
-                </div>
-                <button class="btn btn-primary" id="lc-add-scan-btn" style="background:var(--leopards-red);padding:12px 18px;border-radius:12px;">
-                  ADD
-                </button>
-              </div>
-            </div>
-
-            <div style="margin-top:16px;">
-              <table class="oms-table">
-                <thead>
-                  <tr>
-                    <th style="width:12%;">#</th>
-                    <th>CN#</th>
-                    <th style="width:28%;">Customer</th>
-                    <th style="width:18%;">Amount</th>
-                    <th style="width:16%;">Action</th>
-                  </tr>
-                </thead>
-                <tbody id="lc-scan-table-body">
-                  <tr><td colspan="5" style="text-align:center;padding:18px;color:var(--text-muted);font-weight:800;">No scans yet</td></tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div style="margin-top:18px;padding-top:16px;border-top:1px solid var(--border-light);">
-              <div class="grid-2" style="row-gap:14px;column-gap:18px;">
-                <div>
-                  <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Customer Name</label>
-                  <input class="search-input" id="lc-customer-name" placeholder="Enter customer name..." />
-                </div>
-                <div>
-                  <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Amount</label>
-                  <input class="search-input" id="lc-amount" placeholder="Enter amount..." inputmode="decimal" />
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      `;
-    }
-  };
-
-  // Report placeholders
-  const makeReportPage = (title) => () => `
-    <h2>Reports: ${__oms.escape(title)}</h2>
-    <h3>Generating detailed reports for ${__oms.escape(title)}.</h3>
-    <div class="placeholder" style="text-align:left;">
-      <p style="color:var(--text-secondary);font-weight:700;">
-        Report content for <strong>${__oms.escape(title)}</strong> will appear here.
-      </p>
-      <div style="margin-top:18px;display:flex;justify-content:flex-end;">
-        <button class="btn btn-primary">Generate Report</button>
       </div>
     </div>
-  `;
 
-  const makeSummaryPage = (title) => () => `
-    <h2>${__oms.escape(title)} Summary</h2>
-    <h3>Operational summary views.</h3>
-    <div class="placeholder" style="text-align:left;">
-      <p style="color:var(--text-secondary);font-weight:700;">
-        Summary content for <strong>${__oms.escape(title)}</strong> will appear here.
-      </p>
-      <div style="margin-top:18px;display:flex;justify-content:flex-end;">
-        <button class="btn btn-primary">Generate Summary</button>
+    <!-- ADD DELIVERED -->
+    <div id="panel-add-delivered" style="display:none;">
+      <h2 style="margin:0 0 14px 0;">DELIVERED SHIPMENTS</h2>
+      <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);border-radius:18px;padding:14px;margin-bottom:14px;">
+        <div style="display:grid;grid-template-columns:180px 1fr;gap:10px;align-items:end;">
+          <div>
+            <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;font-weight:900;">Assign Date</div>
+            <input id="deliveredDateFilter" type="date" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px 12px;color:white;outline:none;font-weight:800;" />
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);border-radius:18px;padding:14px;margin-bottom:14px;">
+        <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end;">
+          <div>
+            <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;font-weight:900;">CN Number</div>
+            <input id="deliveredCnInput" type="text" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px 12px;color:white;outline:none;font-weight:800;" placeholder="Delivered CN enter karein" />
+          </div>
+          <button id="btnMarkDelivered" type="button" class="card-btn" style="background:rgba(0,255,191,0.14);padding:11px 16px;font-weight:900;">Mark Delivered</button>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);border-radius:18px;padding:14px;">
+        <div style="font-size:13px;color:#7ea5cf;font-weight:900;margin-bottom:10px;text-align:center;">DELIVERED LIST</div>
+        <div style="overflow-x:auto;max-height:420px;">
+          <table style="width:100%;min-width:720px;">
+            <thead><tr><th>Sr#</th><th>CN#</th><th>Rider Code</th><th>Rider Name</th><th>Assign Date</th><th>Delivered Date</th><th>Status</th></tr></thead>
+            <tbody id="deliveredRows"><tr><td colspan="7" style="text-align:center;color:#d8e4f3;">No delivered CN</td></tr></tbody>
+          </table>
+        </div>
       </div>
     </div>
-  `;
 
-  // Dynamically handle report/summary/setup pages
-  (function registerDynamicPages(){
-    const register = (tab, fn) => { __oms.pages[tab] = fn; };
+    <!-- DELETE STATUS -->
+    <div id="panel-delete-status" style="display:none;">
+      <h2 style="margin:0 0 14px 0;">DELETE STATUS</h2>
+      <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);border-radius:18px;padding:14px;margin-bottom:14px;">
+        <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end;">
+          <div>
+            <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;font-weight:900;">CN Number</div>
+            <input id="deleteCnInput" type="text" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px 12px;color:white;outline:none;font-weight:800;" placeholder="CN delete karein" />
+          </div>
+          <button id="btnDeleteStatus" type="button" class="card-btn" style="background:rgba(255,80,80,0.16);padding:11px 16px;font-weight:900;">Delete CN</button>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);border-radius:18px;padding:14px;">
+        <div style="font-size:13px;color:#7ea5cf;font-weight:900;margin-bottom:10px;text-align:center;">ALL CN STATUS</div>
+        <div style="overflow-x:auto;max-height:420px;">
+          <table style="width:100%;min-width:720px;">
+            <thead><tr><th>Sr#</th><th>CN#</th><th>Rider Code</th><th>Rider Name</th><th>Status</th><th>Date</th></tr></thead>
+            <tbody id="deleteStatusRows"><tr><td colspan="6" style="text-align:center;color:#d8e4f3;">No CN data</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
-    // Reports
-    [
-      "Reports-Debriefing Report","Reports-Assign Runsheet","Reports-Proof of Delivery","Reports-OSA Assign Report",
-      "Reports-Missing Signatures","Reports-Missing Geo Coords","Reports-Transport Mode Report","Reports-Shipper Advice Report",
-      "Reports-CN Booking Detail","Reports-Sheet Verification","Reports-DR Server","Reports-Runsheet Archive By CNs",
-      "Reports-Realtime Activity","Reports-Runsheet Archive","Reports-Online Assign Graph","Reports-Online History Trend",
-      "Reports-QSR As Of Date","Reports-Live Field Summary"
-    ].forEach(tab=>{
-      const title = tab.replace('Reports-','').replace(' Reports','');
-      register(tab, makeReportPage(title));
-    });
+    <!-- FORWARD DESK -->
+    <div id="panel-forward-desk" style="display:none;">
+      <h2 style="margin:0 0 14px 0;">FORWARD DESK</h2>
 
-    // Summary
-    [
-      "Summary-Performance","Summary-Mobile Delivery","Summary-Performance Assign","Summary-Balancesheet",
-      "Summary-E2E","Summary-Hub Balance","Summary-OSA","Summary-Overall","Summary-Data Upload"
-    ].forEach(tab=>{
-      const title = tab.replace('Summary-','');
-      register(tab, makeSummaryPage(title));
-    });
+      <!-- Emp Code + Emp Name + Counter (Responsive) -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 160px;gap:12px;margin-bottom:14px;align-items:start;">
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);border-radius:18px;padding:14px;">
+          <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;font-weight:900;text-align:center;">Emp Code</div>
+          <input id="fdEmpCode" type="text" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px 12px;color:white;outline:none;text-align:center;font-weight:800;" placeholder="Emp Code" />
+        </div>
 
-    // Setup
-    register("Setup-Users", () => __oms.renderGenericPlaceholder("Setup: Users Management", "Manage user accounts and permissions."));
-    register("Setup-Riders", () => {
-      const riders = __oms.state?.riders || [];
-      const rows = riders.map(r => `
-        <tr>
-          <td>${__oms.escape(r.empNo || '')}</td>
-          <td>${__oms.escape(r.riderId || '')}</td>
-          <td>${__oms.escape(r.name || '')}</td>
-          <td>${__oms.escape(r.empType || '')}</td>
-          <td>${__oms.escape(r.mobile || '')}</td>
-          <td>${__oms.escape(r.phone || '')}</td>
-          <td>${__oms.escape(r.status || 'ACTIVE')}</td>
-          <td>
-            <button class="btn btn-muted" data-action="rider-delete" data-empno="${__oms.escape(r.empNo || '')}" style="padding:8px 10px;font-size:.82rem;border-radius:8px;">
-              Delete
-            </button>
-          </td>
-        </tr>
-      `).join('');
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);border-radius:18px;padding:14px;">
+          <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;font-weight:900;text-align:center;">Emp Name</div>
+          <input id="fdEmpName" type="text" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px 12px;color:white;outline:none;text-align:center;font-weight:800;" placeholder="Emp Name" disabled />
+        </div>
 
-      return `
-        <h2 style="font-size:1.35rem;margin-bottom:6px;">Setup - Riders</h2>
-        <h3 style="margin-bottom:14px;font-size:.95rem;">Add new rider (Courier) and manage rider/emp mapping.</h3>
+        <div>
+          <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;text-align:center;font-weight:800;">COUNTER</div>
+          <div style="width:150px;height:150px;border-radius:999px;margin:0 auto;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;">
+            <input id="fdCounter" type="text" value="0" style="width:100%;padding:0;border:0;background:transparent;color:white;outline:none;text-align:center;font-weight:900;font-size:42px;" disabled />
+          </div>
+        </div>
+      </div>
 
-        <!-- Search (top) -->
-        <div class="card" style="padding:12px 16px;margin-top:10px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
-            <div style="flex:1;min-width:220px;">
-              <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Search</label>
-              <input class="search-input" id="rider-table-search" placeholder="Search by Emp # / Name / Rider Id..." style="padding:8px 12px;font-size:.82rem;" />
+      <!-- Product + COD + General -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:12px;margin-bottom:14px;">
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);border-radius:18px;padding:14px;">
+          <div style="font-size:13px;color:#7ea5cf;font-weight:900;margin-bottom:10px;text-align:center;">PRODUCT</div>
+          <div style="height:44px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.20);border:1px solid rgba(255,255,255,0.08);border-radius:14px;color:#fff;font-weight:900;margin-bottom:10px;" id="fdProductSelectSlot">Product</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+            <button id="fdOptCOD" type="button" class="card-btn" style="background:rgba(255,255,255,0.04);padding:12px 10px;font-weight:900;opacity:1;">COD</button>
+            <button id="fdOptGeneral" type="button" class="card-btn" style="background:rgba(255,255,255,0.04);padding:12px 10px;font-weight:900;opacity:1;">General</button>
+          </div>
+          <div id="fdSelectedOpt" style="margin-top:10px;color:#d8e4f3;font-size:12px;text-align:center;">Selected: -</div>
+        </div>
+
+        <!-- CN SCAN -->
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);border-radius:18px;padding:14px;">
+          <div style="font-size:13px;color:#7ea5cf;font-weight:900;margin-bottom:10px;text-align:center;">CN SCAN</div>
+
+          <div style="display:grid;grid-template-columns:1fr;gap:10px;">
+            <div>
+              <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;">CN (Scan / Enter)</div>
+              <input id="fdCnScan" type="text" style="width:100%;padding:12px;border-radius:14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);color:white;outline:none;font-size:18px;font-weight:bold;" placeholder="Scan / Enter CN" />
             </div>
-            <div class="hint">
-              Show <strong id="rider-table-show-count">100</strong> entries
-            </div>
+
+            <button id="fdBtnScan" type="button" class="card-btn" style="width:100%;background:rgba(255,255,255,0.12);padding:12px 16px;font-weight:900;">Count +1</button>
+          </div>
+
+          <div style="color:#d8e4f3;font-size:12px;margin-top:10px;text-align:center;">
+            CN scan/Enter karein to counter increment hoga.
+          </div>
+        </div>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);border-radius:18px;padding:14px;margin-top:14px;">
+        <div style="font-size:13px;color:#7ea5cf;font-weight:900;margin-bottom:10px;text-align:center;">ENTERED CN LIST</div>
+        <div style="overflow-x:auto;max-height:260px;">
+          <table style="width:100%;min-width:420px;">
+            <thead>
+              <tr>
+                <th>Sr#</th>
+                <th>CN#</th>
+                <th>Product</th>
+              </tr>
+            </thead>
+            <tbody id="fdCnList">
+              <tr id="fdCnEmptyRow">
+                <td colspan="3" style="text-align:center;color:#d8e4f3;">No CN entered</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px;">
+          <button id="fdPrintMobile" type="button" class="card-btn" style="background:rgba(0,210,255,0.16);padding:12px 16px;font-weight:900;">Print Mobile</button>
+          <button id="fdPushMobile" type="button" class="card-btn" style="background:rgba(0,255,191,0.14);padding:12px 16px;font-weight:900;">Push to Mobile</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIDER SETUP -->
+    <div id="panel-rider-setup" style="display:none;">
+      <h2 style="margin:0 0 14px 0;">RIDER SETUP</h2>
+      <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);border-radius:18px;padding:14px;margin-bottom:14px;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+          <div>
+            <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;font-weight:900;">Emp Code</div>
+            <input id="riderEmpCode" type="text" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px 12px;color:white;outline:none;font-weight:800;" placeholder="Emp Code" />
+          </div>
+          <div>
+            <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;font-weight:900;">Name</div>
+            <input id="riderName" type="text" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px 12px;color:white;outline:none;font-weight:800;" placeholder="Rider Name" />
+          </div>
+          <div>
+            <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;font-weight:900;">CNIC</div>
+            <input id="riderCnic" type="text" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px 12px;color:white;outline:none;font-weight:800;" placeholder="CNIC" />
+          </div>
+          <div>
+            <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;font-weight:900;">Phone Number</div>
+            <input id="riderPhone" type="text" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px 12px;color:white;outline:none;font-weight:800;" placeholder="Phone Number" />
+          </div>
+          <div>
+            <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;font-weight:900;">Join Date</div>
+            <input id="riderJoinDate" type="date" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px 12px;color:white;outline:none;font-weight:800;" />
+          </div>
+          <div>
+            <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;font-weight:900;">Address</div>
+            <input id="riderAddress" type="text" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px 12px;color:white;outline:none;font-weight:800;" placeholder="Address" />
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap;">
+          <button id="btnSaveRider" type="button" class="card-btn" style="background:rgba(0,255,191,0.14);padding:12px 18px;font-weight:900;">Save Rider</button>
+          <button id="btnClearRider" type="button" class="card-btn" style="background:rgba(255,255,255,0.12);padding:12px 18px;font-weight:900;">Clear</button>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);border-radius:18px;padding:14px;">
+        <div style="font-size:13px;color:#7ea5cf;font-weight:900;margin-bottom:10px;text-align:center;">RIDER LIST</div>
+        <div style="overflow-x:auto;max-height:420px;">
+          <table style="width:100%;min-width:920px;">
+            <thead>
+              <tr>
+                <th>Emp Code</th>
+                <th>Name</th>
+                <th>CNIC</th>
+                <th>Phone</th>
+                <th>Join Date</th>
+                <th>Address</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="riderRows">
+              <tr><td colspan="7" style="text-align:center;color:#d8e4f3;">No rider added</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORWARD REPORT -->
+    <div id="panel-forward-report" style="display:none;">
+      <h2 style="margin:0 0 14px 0;">FORWARD REPORT</h2>
+      <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);border-radius:18px;padding:14px;margin-bottom:14px;">
+        <div style="display:grid;grid-template-columns:1fr 180px;gap:10px;align-items:end;">
+          <div>
+            <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;font-weight:900;">Emp / Route Code</div>
+            <input id="reportEmpCode" type="text" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px 12px;color:white;outline:none;font-weight:800;" placeholder="Emp Code se report filter karein" />
+          </div>
+          <div>
+            <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;font-weight:900;">Date</div>
+            <input id="reportDate" type="date" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px 12px;color:white;outline:none;font-weight:800;" />
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);border-radius:18px;padding:14px;">
+        <div style="font-size:13px;color:#7ea5cf;font-weight:900;margin-bottom:10px;text-align:center;">PUSHED DATA</div>
+        <div style="overflow-x:auto;max-height:420px;">
+          <table style="width:100%;min-width:760px;">
+            <thead>
+              <tr>
+                <th>Sr#</th>
+                <th>Route Code</th>
+                <th>Route Name</th>
+                <th>Product</th>
+                <th>Total CN</th>
+                <th>Push Date</th>
+                <th>Push Time</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="forwardReportRows">
+              <tr><td colspan="8" style="text-align:center;color:#d8e4f3;">Emp code enter karein</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ASSIGN SUMMARY REPORT -->
+    <div id="panel-assign-summary" style="display:none;">
+      <h2 style="margin:0 0 14px 0;">ASSIGN SUMMARY REPORT</h2>
+      <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);border-radius:18px;padding:14px;margin-bottom:14px;">
+        <div style="display:grid;grid-template-columns:180px 1fr;gap:10px;align-items:end;">
+          <div>
+            <div style="color:#7ea5cf;font-size:12px;margin-bottom:6px;font-weight:900;">Assign Date</div>
+            <input id="summaryDateFilter" type="date" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px 12px;color:white;outline:none;font-weight:800;" />
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);border-radius:18px;padding:14px;">
+        <div style="font-size:13px;color:#7ea5cf;font-weight:900;margin-bottom:10px;text-align:center;">RIDER SHIPMENT SUMMARY</div>
+        <div style="overflow-x:auto;max-height:500px;">
+          <table style="width:100%;min-width:860px;">
+            <thead>
+              <tr>
+                <th>Sr#</th>
+                <th>Rider Code</th>
+                <th>Rider Name</th>
+                <th>Total Shipment</th>
+                <th>Delivered</th>
+                <th>Pending</th>
+                <th>Percentage</th>
+              </tr>
+            </thead>
+            <tbody id="assignSummaryRows">
+              <tr><td colspan="7" style="text-align:center;color:#d8e4f3;">No shipment data</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-grid" id="main-dashboard-grid">
+
+      <div class="bubble-card blue">
+        <div class="card-icon">📈</div>
+        <h3>Analytics</h3>
+        <p>Track live analytics, traffic performance, and operational metrics with a futuristic dashboard style.</p>
+        <a href="#" class="card-btn">Explore</a>
+      </div>
+
+      <div class="bubble-card orange">
+        <div class="card-icon">🛒</div>
+        <h3>Orders</h3>
+        <p>Manage customer orders with smooth bubble cards and glowing interactive buttons.</p>
+        <a href="#" class="card-btn">View Orders</a>
+      </div>
+
+      <div class="bubble-card purple">
+        <div class="card-icon">👥</div>
+        <h3>Customers</h3>
+        <p>Access user profiles, customer activity, and engagement reports in one place.</p>
+        <a href="#" class="card-btn">Manage</a>
+      </div>
+
+      <div class="bubble-card green">
+        <div class="card-icon">💰</div>
+        <h3>Revenue</h3>
+        <p>Monitor revenue growth and financial performance with modern glassmorphism effects.</p>
+        <a href="#" class="card-btn">Details</a>
+      </div>
+
+      <div class="bubble-card yellow">
+        <div class="card-icon">🚀</div>
+        <h3>Projects</h3>
+        <p>Handle all project workflows and deadlines with premium animated UI components.</p>
+        <a href="#" class="card-btn">Open</a>
+      </div>
+
+      <div class="bubble-card pink">
+        <div class="card-icon">🔔</div>
+        <h3>Notifications</h3>
+        <p>Get real-time alerts, updates, and system notifications inside stylish glowing cards.</p>
+        <a href="#" class="card-btn">Check</a>
+      </div>
+
+    </div>
+
+    <div class="stats-section" id="main-stats-section">
+
+      <div class="glass-panel">
+        <h2>Performance Overview</h2>
+
+        <div class="progress-box">
+          <div class="progress-title">
+            <span>System Performance</span>
+            <span>85%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:85%"></div>
           </div>
         </div>
 
-        <div class="card" style="padding:12px 16px;margin-top:12px;">
-          <div style="font-weight:950;color:var(--text-main);margin-bottom:10px;font-size:.98rem;">Add New Rider (Courier)</div>
-
-          <div class="grid-2">
-            <div>
-              <label class="hint" style="display:block;margin-bottom:6px;font-weight:950;color:var(--text-secondary);font-size:.82rem;">Station</label>
-              <input class="search-input" id="rider-station" value="ATTOCK" disabled style="padding:8px 12px;font-size:.82rem;" />
-            </div>
-
-            <div>
-              <label class="hint" style="display:block;margin-bottom:6px;font-weight:950;color:var(--text-secondary);font-size:.82rem;">Rider Id</label>
-              <input class="search-input" id="rider-rider-id" placeholder="e.g. R1001" style="padding:8px 12px;font-size:.82rem;" />
-            </div>
-
-            <div>
-              <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;color:var(--text-secondary);">Emp Type</label>
-              <select class="search-input" id="rider-emp-type">
-                <option value="">- Select -</option>
-                <option value="COURIER">COURIER</option>
-                <option value="OFFICER">OFFICER</option>
-                <option value="DRIVER">DRIVER</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;color:var(--text-secondary);">CNIC</label>
-              <input class="search-input" id="rider-cnic" placeholder="CNIC / NIC" />
-            </div>
-
-            <div>
-              <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;color:var(--text-secondary);">Emp #</label>
-              <input class="search-input" id="rider-emp-no" placeholder="Emp # (used in DSE)" inputmode="numeric" />
-            </div>
-
-            <div>
-              <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;color:var(--text-secondary);">Mobile</label>
-              <input class="search-input" id="rider-mobile" placeholder="Mobile" inputmode="tel" />
-            </div>
-
-            <div>
-              <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;color:var(--text-secondary);">Phone</label>
-              <input class="search-input" id="rider-phone" placeholder="Phone" inputmode="tel" />
-            </div>
-
-            <div>
-              <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;color:var(--text-secondary);">Status</label>
-              <select class="search-input" id="rider-status">
-                <option value="ACTIVE" selected>ACTIVE</option>
-                <option value="INACTIVE">INACTIVE</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;color:var(--text-secondary);">Rider Name</label>
-              <input class="search-input" id="rider-name" placeholder="Rider Name" />
-            </div>
-
-            <div>
-              <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;color:var(--text-secondary);">Birth Date</label>
-              <input class="search-input" id="rider-birth-date" type="date" value="${new Date().toISOString().split('T')[0]}" />
-            </div>
-
-            <div>
-              <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;color:var(--text-secondary);">Join Date</label>
-              <input class="search-input" id="rider-join-date" type="date" value="${new Date().toISOString().split('T')[0]}" />
-            </div>
-
-            <div>
-              <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;color:var(--text-secondary);">Left Date</label>
-              <input class="search-input" id="rider-left-date" type="date" value="${new Date().toISOString().split('T')[0]}" />
-            </div>
-
-            <div style="grid-column:1 / -1;">
-              <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;color:var(--text-secondary);">Left Reason</label>
-              <input class="search-input" id="rider-left-reason" placeholder="Left Reason" />
-            </div>
-
-            <div style="grid-column:1 / -1;">
-              <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;color:var(--text-secondary);">Address</label>
-              <textarea class="search-input" id="rider-address" placeholder="Address" style="min-height:86px;resize:vertical;"></textarea>
-            </div>
+        <div class="progress-box">
+          <div class="progress-title">
+            <span>User Engagement</span>
+            <span>72%</span>
           </div>
-
-          <div style="margin-top:14px;display:flex;justify-content:flex-end;gap:12px;flex-wrap:wrap;">
-            <button class="btn btn-muted" id="rider-clear-btn" type="button" style="padding:10px 14px;border-radius:12px;">Clear</button>
-            <button class="btn btn-primary" id="rider-save-btn" type="button" style="background:var(--leopards-red);padding:12px 20px;border-radius:14px;">
-              Save
-            </button>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:72%"></div>
           </div>
         </div>
 
-        <div class="card" style="padding:0;margin-top:16px;overflow:hidden;">
-          <div style="padding:14px 16px;border-left:4px solid var(--leopards-red);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
-            <div style="font-weight:950;color:var(--text-main);">Riders</div>
-            <div class="hint">Show <strong id="rider-table-show-count">100</strong> entries</div>
+        <div class="progress-box">
+          <div class="progress-title">
+            <span>Project Completion</span>
+            <span>91%</span>
           </div>
-
-          <div style="padding:14px 16px;border-top:1px solid var(--border-light);">
-            <div class="row" style="margin:0;justify-content:space-between;gap:12px;">
-              <div style="flex:1;min-width:220px;">
-                <label class="hint" style="display:block;margin-bottom:8px;font-weight:950;">Search</label>
-                <input class="search-input" id="rider-table-search" placeholder="Search by Emp # / Name / Rider Id..." />
-              </div>
-            </div>
-          </div>
-
-          <div style="padding:0;">
-            <table class="oms-table">
-              <thead>
-                <tr>
-                  <th>Emp #</th>
-                  <th>Rider Id</th>
-                  <th>Name</th>
-                  <th>Emp Type</th>
-                  <th>Mobile</th>
-                  <th>Phone</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="rider-table-body">
-                ${rows || `<tr><td colspan="8" style="text-align:center;padding:22px;color:var(--text-muted);font-weight:800;">No riders yet</td></tr>`}
-              </tbody>
-            </table>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:91%"></div>
           </div>
         </div>
-      `;
-    });
+      </div>
 
-    // Leopards + other placeholders
-    [
-      "Leopards-OSA","Leopards-Upfront Rider",
-      "Inter Transfer","Inter Transfer-RTN","Return to Shipper DSE","Rider Mobile Shipments",
-      "Mobile API Log","Update Missing Signs"
-    ].forEach(tab=>{
-      __oms.pages[tab] = () => __oms.renderGenericPlaceholder(tab, "This module is currently under development or configuration.");
-    });
-  })();
+      <div class="glass-panel">
+        <h2>Recent Activity</h2>
 
-  // ---------------- Page Hydration ----------------
-  __oms.hydratePage = (tabName) => {
-    // Debriefing run sheet search
-    if (tabName === 'Debriefing') {
-      const input = __oms.byId('runSheetSearch');
-      const clearBtn = __oms.byId('clearRunSheet');
-      const body = __oms.byId('runsheet-table-body');
+        <table>
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Status</th>
+            </tr>
+          </thead>
 
-      const renderRows = (list) => {
-        body.innerHTML = list.map(rs => `
+          <tbody>
+            <tr>
+              <td>Dashboard Upgrade</td>
+              <td><span class="status active-status">Completed</span></td>
+            </tr>
+
+            <tr>
+              <td>Order Processing</td>
+              <td><span class="status pending-status">Pending</span></td>
+            </tr>
+
+            <tr>
+              <td>User Verification</td>
+              <td><span class="status active-status">Active</span></td>
+            </tr>
+
+            <tr>
+              <td>Monthly Reports</td>
+              <td><span class="status pending-status">Review</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <div id="fdPrintSheet" class="print-sheet">
+      <h1>FORWARD DESK CN SHEET</h1>
+      <div class="print-meta">
+        <div><strong>Route Code:</strong> <span id="printRouteCode">-</span></div>
+        <div><strong>Route Name:</strong> <span id="printRouteName">-</span></div>
+        <div><strong>Product:</strong> <span id="printProduct">-</span></div>
+        <div><strong>Total CN:</strong> <span id="printTotalCn">0</span></div>
+        <div><strong>Date:</strong> <span id="printDate">-</span></div>
+        <div><strong>Time:</strong> <span id="printTime">-</span></div>
+      </div>
+      <table>
+        <thead>
           <tr>
-            <td style="font-weight:900;">${__oms.escape(rs.id)}</td>
-            <td>${__oms.escape(rs.courier)}</td>
-            <td style="font-weight:900;">${rs.delivered}/${rs.total}</td>
-            <td>${__oms.renderStatusPill(rs.status === 'Closed' ? 'Closed' : 'Pending')}</td>
-            <td>
-              ${rs.status === 'Pending'
-                ? `<button class="btn btn-primary" data-action="close-sheet" data-id="${__oms.escape(rs.id)}">Close Sheet</button>`
-                : `<button class="btn btn-muted" data-action="view-sheet" data-id="${__oms.escape(rs.id)}">View</button>`
-              }
-            </td>
+            <th>Sr#</th>
+            <th>CN Number</th>
+            <th>Barcode</th>
           </tr>
-        `).join('');
-      };
+        </thead>
+        <tbody id="printCnRows"></tbody>
+      </table>
+    </div>
 
-      const filter = () => {
-        const term = (input.value || '').trim().toLowerCase();
-        const list = __oms.state.runSheets.filter(rs => rs.id.toLowerCase().includes(term));
-        renderRows(list);
-      };
+  </div>
 
-      input.addEventListener('input', filter);
-      clearBtn.addEventListener('click', () => { input.value=''; filter(); });
-    }
+  <script>
+    (function () {
+      function toArray(list) {
+        return Array.prototype.slice.call(list || []);
+      }
 
-    // Control Tower search
-    if (tabName === 'Control Tower') {
-      const input = __oms.byId('shipmentSearch');
-      const clearBtn = __oms.byId('clearShipment');
-      const body = __oms.byId('exception-table-body');
+      function trimText(value) {
+        return String(value || '').replace(/^\s+|\s+$/g, '');
+      }
 
-      const renderRows = (list) => {
-        body.innerHTML = list.map(ex => `
-          <tr class="${ex.status === 'Urgent' ? 'urgent-row' : ''}">
-            <td><strong>${__oms.escape(ex.shipmentId)}</strong></td>
-            <td>${__oms.escape(ex.reason)}</td>
-            <td>${__oms.renderStatusPill(ex.status)}</td>
-            <td>
-              ${ex.status === 'Urgent'
-                ? `<button class="btn btn-primary" data-action="acknowledge" data-id="${__oms.escape(ex.id)}">Acknowledge</button>`
-                : `<button class="btn btn-muted" data-action="view-exception" data-id="${__oms.escape(ex.id)}">View</button>`
-              }
-            </td>
-          </tr>
-        `).join('');
-      };
+      function twoDigit(value) {
+        value = String(value);
+        return value.length < 2 ? '0' + value : value;
+      }
 
-      const filter = () => {
-        const term = (input.value || '').trim().toLowerCase();
-        const list = __oms.state.exceptions.filter(ex =>
-          ex.shipmentId.toLowerCase().includes(term) || ex.reason.toLowerCase().includes(term)
-        );
-        renderRows(list);
-      };
+      function fdTodayIso(now) {
+        now = now || new Date();
+        return now.getFullYear() + '-' + twoDigit(now.getMonth() + 1) + '-' + twoDigit(now.getDate());
+      }
 
-      input.addEventListener('input', filter);
-      clearBtn.addEventListener('click', () => { input.value=''; filter(); });
-    }
+      function fdDateToIso(value) {
+        var text = trimText(value);
+        var parts;
+        var first;
+        var second;
+        var third;
 
-    // Delete status: Enter to search -> live fetch from LeopardOMS
-    if (tabName === 'Debriefing-Delete Status') {
-      const input = __oms.byId('cnSearchInput');
-      const body = __oms.byId('delete-status-table-body');
+        if (!text) return '';
+        if (/^\d{4}-\d{2}-\d{2}$/.test(text)) return text;
+        parts = text.split(/[\/\-\.]/);
+        if (parts.length !== 3) return '';
+        first = Number(parts[0]);
+        second = Number(parts[1]);
+        third = Number(parts[2]);
+        if (!first || !second || !third) return '';
+        if (parts[0].length === 4) return parts[0] + '-' + twoDigit(second) + '-' + twoDigit(third);
+        if (first > 12) return String(third) + '-' + twoDigit(second) + '-' + twoDigit(first);
+        return String(third) + '-' + twoDigit(first) + '-' + twoDigit(second);
+      }
 
-      const toRowsFromResponse = (data) => {
-        const list =
-          (Array.isArray(data) ? data : null) ||
-          (Array.isArray(data?.records) ? data.records : null) ||
-          (Array.isArray(data?.data) ? data.data : null) ||
-          (Array.isArray(data?.result) ? data.result : null) ||
-          [];
+      function fdShipmentAssignIso(shipment) {
+        return shipment.assignedIsoDate || fdDateToIso(shipment.assignedDate);
+      }
 
-        if (!list.length) {
-          return `<tr><td colspan="13" style="text-align:center;padding:40px;color:var(--text-muted);font-weight:750;">No Record..!</td></tr>`;
-        }
+      var items = document.querySelectorAll('.accordion-item');
+      toArray(items).forEach(function (item) {
+        var btn = item.querySelector('.accordion-btn');
+        if (!btn) return;
 
-        return list.map((row, idx) => {
-          const cnNum = row.cn ?? row.CN ?? row.consignmentNumber ?? row.consignment_no ?? '';
-          const routeDate = row.routeDate ?? row.route_date ?? '';
-          const statusDate = row.statusDate ?? row.status_date ?? '';
-          const status = row.status ?? row.Status ?? row.currentStatus ?? '';
-          const reason = row.reason ?? row.reasonText ?? row.Receiver ?? row.receiver ?? '';
-          const receiverRel = row.receiverRelation ?? row.relation ?? '';
-          const routOfficer = row.routOfficer ?? row.RoutOfficer ?? row.officer ?? '';
-          const station = row.station ?? row.Station ?? '';
-          const username = row.username ?? row.user ?? '';
-          const updatedOn = row.updatedOn ?? row.updated_on ?? '';
-
-          const picUrl = row.picUrl ?? row.pic ?? row.photoUrl ?? '';
-          const picCell = picUrl
-            ? `<img alt="pic" src="${__oms.escape(picUrl)}" style="width:34px;height:34px;border-radius:8px;object-fit:cover;border:1px solid rgba(0,0,0,.08);" />`
-            : `<span style="color:var(--text-muted);font-weight:800;">-</span>`;
-
-          return `
-            <tr>
-              <td style="font-weight:900;">${idx + 1}</td>
-              <td>${__oms.escape(cnNum)}</td>
-              <td>${__oms.escape(routeDate)}</td>
-              <td>${__oms.escape(statusDate)}</td>
-              <td>${__oms.renderStatusPill(status || 'Pending')}</td>
-              <td>${__oms.escape(receiverRel ? receiverRel + ' - ' : '')}${__oms.escape(reason)}</td>
-              <td>
-                <button class="btn btn-primary" data-action="delete-status-row" data-index="${idx}" data-cn="${__oms.escape(cnNum)}" style="padding:8px 10px;font-size:.82rem;">
-                  Delete
-                </button>
-              </td>
-              <td>${__oms.escape(routOfficer)}</td>
-              <td>${__oms.escape(station)}</td>
-              <td>${__oms.escape(username)}</td>
-              <td>${__oms.escape(updatedOn)}</td>
-              <td>${picCell}</td>
-              <td>
-                <button class="btn btn-muted" data-action="view-status-row" data-index="${idx}" data-cn="${__oms.escape(cnNum)}" style="padding:8px 10px;font-size:.82rem;">
-                  View
-                </button>
-              </td>
-            </tr>
-          `;
-        }).join('');
-      };
-
-      input.addEventListener('keydown', async (e) => {
-        if (e.key !== 'Enter') return;
-        e.preventDefault();
-
-        const cn = (input.value || '').trim();
-        if (!cn) return;
-
-        body.innerHTML = `<tr><td colspan="13" style="text-align:center;padding:40px;color:var(--text-muted);font-weight:850;">Searching for ${__oms.escape(cn)}...</td></tr>`;
-
-        try {
-          // Use backend proxy to avoid CORS:
-          // GET /api/leopards-lookup?cn=<CN>
-          const url = `https://leopardsoms.pk/api/leopards-lookup?cn=${encodeURIComponent(cn)}`;
-          const res = await fetch(url, { method: 'GET' });
-
-          if (!res.ok) {
-            const errText = await res.text().catch(() => '');
-            body.innerHTML = `<tr><td colspan="13" style="text-align:center;padding:40px;color:var(--leopards-red);font-weight:900;">
-              Proxy request failed: HTTP ${res.status}<br/>
-              ${errText ? ('<span style="color:var(--text-secondary);font-weight:800;">' + __oms.escape(errText).slice(0, 220) + '</span>') : ''}
-            </td></tr>`;
-            return;
-          }
-
-          const contentType = res.headers.get('content-type') || '';
-          if (contentType.includes('application/json')) {
-            const data = await res.json();
-            body.innerHTML = toRowsFromResponse(data);
-          } else {
-            const text = await res.text();
-            body.innerHTML = `<tr><td colspan="13" style="text-align:center;padding:40px;color:var(--text-muted);font-weight:750;">
-              Proxy returned non-JSON response.<br/>${__oms.escape(text).slice(0, 300)}
-            </td></tr>`;
-          }
-        } catch (err) {
-        body.innerHTML = `<tr><td colspan="13" style="text-align:center;padding:40px;color:var(--leopards-red);font-weight:900;">
-            Live fetch failed (likely CORS/network).<br/>
-            Solution: LeopardOMS ke liye server-side proxy/OMS endpoint enable karwana hoga.
-          </td></tr>`;
-          console.error('Live fetch error for CN:', cn, err);
-        }
+        btn.addEventListener('click', function () {
+          var isOpen = item.classList.contains('open');
+          toArray(items).forEach(function (menuItem) {
+            menuItem.classList.remove('open');
+          });
+          if (!isOpen) item.classList.add('open');
+        });
       });
-    }
 
-    // ---------------- Setup: Riders (Add / List / Delete) ----------------
-    if (tabName === 'Setup-Riders') {
-      const byId = __oms.byId;
+      function showPage(pageId) {
+        var allPanels = document.querySelectorAll('[id^="panel-"]');
+        var panel = document.getElementById('panel-' + pageId);
+        var dashboardGrid = document.getElementById('main-dashboard-grid');
+        var statsSection = document.getElementById('main-stats-section');
 
-      const stationEl = byId('rider-station');
-      const riderIdEl = byId('rider-rider-id');
-      const empTypeEl = byId('rider-emp-type');
-      const cnicEl = byId('rider-cnic');
-      const empNoEl = byId('rider-emp-no');
-
-      const mobileEl = byId('rider-mobile');
-      const phoneEl = byId('rider-phone');
-      const statusEl = byId('rider-status');
-      const nameEl = byId('rider-name');
-
-      const birthDateEl = byId('rider-birth-date');
-      const joinDateEl = byId('rider-join-date');
-      const leftDateEl = byId('rider-left-date');
-      const leftReasonEl = byId('rider-left-reason');
-      const addressEl = byId('rider-address');
-
-      const saveBtn = byId('rider-save-btn');
-      const clearBtn = byId('rider-clear-btn');
-
-      const searchEl = byId('rider-table-search');
-      const body = byId('rider-table-body');
-
-      const renderRows = (list) => {
-        body.innerHTML = list.length
-          ? list.map(r => `
-            <tr>
-              <td>${__oms.escape(r.empNo || '')}</td>
-              <td>${__oms.escape(r.riderId || '')}</td>
-              <td>${__oms.escape(r.name || '')}</td>
-              <td>${__oms.escape(r.empType || '')}</td>
-              <td>${__oms.escape(r.mobile || '')}</td>
-              <td>${__oms.escape(r.phone || '')}</td>
-              <td>${__oms.escape(r.status || 'ACTIVE')}</td>
-              <td>
-                <button class="btn btn-muted" data-action="rider-delete" data-empno="${__oms.escape(r.empNo || '')}" style="padding:8px 10px;font-size:.82rem;border-radius:8px;">
-                  Delete
-                </button>
-              </td>
-            </tr>
-          `).join('')
-          : `<tr><td colspan="8" style="text-align:center;padding:22px;color:var(--text-muted);font-weight:800;">No riders yet</td></tr>`;
-      };
-
-      const getRiders = () => Array.isArray(__oms.state.riders) ? __oms.state.riders : [];
-
-      const normalize = (v) => String(v ?? '').trim().toLowerCase();
-
-      const filter = () => {
-        const term = normalize(searchEl?.value);
-        const list = getRiders();
-        if (!term) return renderRows(list);
-
-        const filtered = list.filter(r => {
-          const empNo = normalize(r.empNo);
-          const riderId = normalize(r.riderId);
-          const name = normalize(r.name);
-          return empNo.includes(term) || riderId.includes(term) || name.includes(term);
+        toArray(allPanels).forEach(function (panelItem) {
+          panelItem.style.display = 'none';
         });
 
-        renderRows(filtered);
+        if (panel) panel.style.display = 'block';
+        if (pageId) {
+          if (dashboardGrid) dashboardGrid.style.display = 'none';
+          if (statsSection) statsSection.style.display = 'none';
+        }
+      }
+
+      toArray(document.querySelectorAll('.accordion-link[data-page]')).forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          showPage(link.getAttribute('data-page'));
+        });
+      });
+
+      var homeLink = document.querySelector('.accordion-link[style*="margin-top:0"]');
+      if (homeLink) {
+        homeLink.addEventListener('click', function (e) {
+          var allPanels = document.querySelectorAll('[id^="panel-"]');
+          var dashboardGrid = document.getElementById('main-dashboard-grid');
+          var statsSection = document.getElementById('main-stats-section');
+
+          e.preventDefault();
+          toArray(allPanels).forEach(function (panelItem) {
+            panelItem.style.display = 'none';
+          });
+          if (dashboardGrid) dashboardGrid.style.display = 'grid';
+          if (statsSection) statsSection.style.display = 'grid';
+        });
+      }
+
+      var panelForwardDesk = document.getElementById('panel-forward-desk');
+      if (!panelForwardDesk) return;
+
+      var fdEmployees = {
+        // Add system employee codes here, for example:
+        // '1001': 'Ali Khan',
+        // '1002': 'Ahmed Raza',
       };
+      var fdEmpCode = document.getElementById('fdEmpCode');
+      var fdEmpName = document.getElementById('fdEmpName');
+      var txtCourier = document.getElementById('txtCourier');
+      var txtCourName = document.getElementById('txtCourName');
+      var txtCn = document.getElementById('txtCn');
+      var txtCounter = document.getElementById('txtCounter');
+      var fdProductSelectSlot = document.getElementById('fdProductSelectSlot');
+      var fdOptCOD = document.getElementById('fdOptCOD');
+      var fdOptGeneral = document.getElementById('fdOptGeneral');
+      var fdSelectedOpt = document.getElementById('fdSelectedOpt');
+      var fdCnScan = document.getElementById('fdCnScan');
+      var fdBtnScan = document.getElementById('fdBtnScan');
+      var fdCounter = document.getElementById('fdCounter');
+      var fdCnList = document.getElementById('fdCnList');
+      var fdCnEmptyRow = document.getElementById('fdCnEmptyRow');
+      var fdPrintMobile = document.getElementById('fdPrintMobile');
+      var fdPushMobile = document.getElementById('fdPushMobile');
+      var reportEmpCode = document.getElementById('reportEmpCode');
+      var reportDate = document.getElementById('reportDate');
+      var forwardReportRows = document.getElementById('forwardReportRows');
+      var riderEmpCode = document.getElementById('riderEmpCode');
+      var riderName = document.getElementById('riderName');
+      var riderCnic = document.getElementById('riderCnic');
+      var riderPhone = document.getElementById('riderPhone');
+      var riderJoinDate = document.getElementById('riderJoinDate');
+      var riderAddress = document.getElementById('riderAddress');
+      var btnSaveRider = document.getElementById('btnSaveRider');
+      var btnClearRider = document.getElementById('btnClearRider');
+      var riderRows = document.getElementById('riderRows');
+      var addPendingAssignRows = document.getElementById('addPendingAssignRows');
+      var addPendingStatusRows = document.getElementById('addPendingStatusRows');
+      var pendingDateFilter = document.getElementById('pendingDateFilter');
+      var deliveredCnInput = document.getElementById('deliveredCnInput');
+      var btnMarkDelivered = document.getElementById('btnMarkDelivered');
+      var deliveredRows = document.getElementById('deliveredRows');
+      var deliveredDateFilter = document.getElementById('deliveredDateFilter');
+      var deleteCnInput = document.getElementById('deleteCnInput');
+      var btnDeleteStatus = document.getElementById('btnDeleteStatus');
+      var deleteStatusRows = document.getElementById('deleteStatusRows');
+      var assignSummaryRows = document.getElementById('assignSummaryRows');
+      var summaryDateFilter = document.getElementById('summaryDateFilter');
+      var printRouteCode = document.getElementById('printRouteCode');
+      var printRouteName = document.getElementById('printRouteName');
+      var printProduct = document.getElementById('printProduct');
+      var printTotalCn = document.getElementById('printTotalCn');
+      var printDate = document.getElementById('printDate');
+      var printTime = document.getElementById('printTime');
+      var printCnRows = document.getElementById('printCnRows');
+      var code128Patterns = [
+        '212222','222122','222221','121223','121322','131222','122213','122312','132212','221213',
+        '221312','231212','112232','122132','122231','113222','123122','123221','223211','221132',
+        '221231','213212','223112','312131','311222','321122','321221','312212','322112','322211',
+        '212123','212321','232121','111323','131123','131321','112313','132113','132311','211313',
+        '231113','231311','112133','112331','132131','113123','113321','133121','313121','211331',
+        '231131','213113','213311','213131','311123','311321','331121','312113','312311','332111',
+        '314111','221411','431111','111224','111422','121124','121421','141122','141221','112214',
+        '112412','122114','122411','142112','142211','241211','221114','413111','241112','134111',
+        '111242','121142','121241','114212','124112','124211','411212','421112','421211','212141',
+        '214121','412121','111143','111341','131141','114113','114311','411113','411311','113141',
+        '114131','311141','411131','211412','211214','211232','2331112'
+      ];
+      var fdReportStorageKey = 'forwardDeskPushedReports';
+      var riderStorageKey = 'riderSetupList';
+      var shipmentStorageKey = 'forwardShipmentStatusList';
 
-      saveBtn.addEventListener('click', () => {
-        const empNo = String(empNoEl?.value ?? '').trim();
-        if (!empNo) return alert('Emp # required');
+      function fdSetCounter(next) {
+        var n = Number(next);
+        if (fdCounter) fdCounter.value = String(isFinite(n) ? n : 0);
+      }
 
-        const riderId = String(riderIdEl?.value ?? '').trim();
-        const empType = String(empTypeEl?.value ?? '').trim();
-        const cnic = String(cnicEl?.value ?? '').trim();
-        const mobile = String(mobileEl?.value ?? '').trim();
-        const phone = String(phoneEl?.value ?? '').trim();
-        const status = String(statusEl?.value ?? 'ACTIVE').trim();
-        const name = String(nameEl?.value ?? '').trim();
-        const birthDate = String(birthDateEl?.value ?? '').trim();
-        const joinDate = String(joinDateEl?.value ?? '').trim();
-        const leftDate = String(leftDateEl?.value ?? '').trim();
-        const leftReason = String(leftReasonEl?.value ?? '').trim();
-        const address = String(addressEl?.value ?? '').trim();
+      function loadRiders() {
+        var raw;
+        try {
+          raw = localStorage.getItem(riderStorageKey);
+          return raw ? JSON.parse(raw) : [];
+        } catch (error) {
+          return [];
+        }
+      }
 
-        const newRider = {
-          empNo,
-          riderId,
-          name,
-          empType,
-          cnic,
-          mobile,
-          phone,
-          status,
-          birthDate,
-          joinDate,
-          leftDate,
-          leftReason,
-          address,
-          station: stationEl?.value ? String(stationEl.value) : undefined
+      function saveRiders(riders) {
+        try {
+          localStorage.setItem(riderStorageKey, JSON.stringify(riders));
+          return true;
+        } catch (error) {
+          alert('Rider save nahi ho saka. Browser storage blocked/full hai.');
+          return false;
+        }
+      }
+
+      function findRiderByCode(code) {
+        var riders = loadRiders();
+        var cleanCode = trimText(code).toUpperCase();
+        var found = null;
+        riders.forEach(function (rider) {
+          if (String(rider.empCode || '').toUpperCase() === cleanCode) found = rider;
+        });
+        return found;
+      }
+
+      function clearRiderForm() {
+        if (riderEmpCode) riderEmpCode.value = '';
+        if (riderName) riderName.value = '';
+        if (riderCnic) riderCnic.value = '';
+        if (riderPhone) riderPhone.value = '';
+        if (riderJoinDate) riderJoinDate.value = '';
+        if (riderAddress) riderAddress.value = '';
+      }
+
+      function renderRiders() {
+        var riders = loadRiders();
+        if (!riderRows) return;
+        riderRows.innerHTML = '';
+
+        if (!riders.length) {
+          var emptyRow = document.createElement('tr');
+          var emptyCell = document.createElement('td');
+          emptyCell.colSpan = 7;
+          emptyCell.style.textAlign = 'center';
+          emptyCell.style.color = '#d8e4f3';
+          emptyCell.textContent = 'No rider added';
+          emptyRow.appendChild(emptyCell);
+          riderRows.appendChild(emptyRow);
+          return;
+        }
+
+        riders.forEach(function (rider) {
+          var tr = document.createElement('tr');
+          var values = [
+            rider.empCode || '-',
+            rider.name || '-',
+            rider.cnic || '-',
+            rider.phone || '-',
+            rider.joinDate || '-',
+            rider.address || '-'
+          ];
+
+          values.forEach(function (value) {
+            var td = document.createElement('td');
+            td.textContent = value;
+            tr.appendChild(td);
+          });
+
+          var actionTd = document.createElement('td');
+          var editBtn = document.createElement('button');
+          editBtn.type = 'button';
+          editBtn.className = 'card-btn';
+          editBtn.style.padding = '8px 10px';
+          editBtn.style.fontWeight = '900';
+          editBtn.style.background = 'rgba(0,210,255,0.16)';
+          editBtn.textContent = 'Edit';
+          editBtn.setAttribute('data-rider-code', rider.empCode || '');
+          actionTd.appendChild(editBtn);
+          tr.appendChild(actionTd);
+          riderRows.appendChild(tr);
+        });
+      }
+
+      function saveRiderFromForm() {
+        var code = riderEmpCode ? trimText(riderEmpCode.value).toUpperCase() : '';
+        var name = riderName ? trimText(riderName.value) : '';
+        var riders;
+        var updated = false;
+        var rider;
+
+        if (!code || !name) {
+          alert('Emp Code aur Name zaroor enter karein.');
+          return;
+        }
+
+        rider = {
+          empCode: code,
+          name: name,
+          cnic: riderCnic ? trimText(riderCnic.value) : '',
+          phone: riderPhone ? trimText(riderPhone.value) : '',
+          joinDate: riderJoinDate ? trimText(riderJoinDate.value) : '',
+          address: riderAddress ? trimText(riderAddress.value) : ''
         };
 
-        const list = getRiders();
+        riders = loadRiders();
+        riders = riders.map(function (item) {
+          if (String(item.empCode || '').toUpperCase() === code) {
+            updated = true;
+            return rider;
+          }
+          return item;
+        });
+        if (!updated) riders.push(rider);
+        if (!saveRiders(riders)) return;
 
-        // upsert by empNo
-        const idx = list.findIndex(r => String(r.empNo) === empNo);
-        if (idx >= 0) list[idx] = { ...list[idx], ...newRider };
-        else list.push(newRider);
+        var shipments = loadShipments();
+        var touched = false;
+        shipments = shipments.map(function (shipment) {
+          if (String(shipment.routeCode || '').toUpperCase() === code) {
+            shipment.routeName = rider.name;
+            touched = true;
+          }
+          return shipment;
+        });
+        if (touched) saveShipments(shipments);
 
-        __oms.state.riders = list;
-
-        // clear form (keep station)
-        if (riderIdEl) riderIdEl.value = '';
-        if (empTypeEl) empTypeEl.value = '';
-        if (cnicEl) cnicEl.value = '';
-        if (mobileEl) mobileEl.value = '';
-        if (phoneEl) phoneEl.value = '';
-        if (statusEl) statusEl.value = 'ACTIVE';
-        if (nameEl) nameEl.value = '';
-        if (birthDateEl) birthDateEl.value = new Date().toISOString().split('T')[0];
-        if (joinDateEl) joinDateEl.value = new Date().toISOString().split('T')[0];
-        if (leftDateEl) leftDateEl.value = '';
-        if (leftReasonEl) leftReasonEl.value = '';
-        if (addressEl) addressEl.value = '';
-
-        filter();
-        alert('Rider saved (Emp # updated).');
-      });
-
-      clearBtn.addEventListener('click', () => {
-        if (riderIdEl) riderIdEl.value = '';
-        if (empTypeEl) empTypeEl.value = '';
-        if (cnicEl) cnicEl.value = '';
-        if (empNoEl) empNoEl.value = '';
-        if (mobileEl) mobileEl.value = '';
-        if (phoneEl) phoneEl.value = '';
-        if (statusEl) statusEl.value = 'ACTIVE';
-        if (nameEl) nameEl.value = '';
-        if (birthDateEl) birthDateEl.value = new Date().toISOString().split('T')[0];
-        if (joinDateEl) joinDateEl.value = new Date().toISOString().split('T')[0];
-        if (leftDateEl) leftDateEl.value = '';
-        if (leftReasonEl) leftReasonEl.value = '';
-        if (addressEl) addressEl.value = '';
-        filter();
-      });
-
-      // initial render + search
-      filter();
-      if (searchEl) searchEl.addEventListener('input', filter);
-
-      // rider delete (page-level delegation already exists on display.onclick for data-action)
-      // so no extra wiring needed here.
-    }
-
-    // ---------------- Leopards: New shipment details (COD/GENERAL + Customer + Amount) ----------------
-    const toMoney = (value) => {
-      const raw = String(value ?? '').trim();
-      if (!raw) return NaN;
-      const normalized = raw.replace(/,/g, '');
-      const num = Number(normalized);
-      if (!Number.isFinite(num)) return NaN;
-      return num;
-    };
-
-    const renderLeopardsRowsTable = (rows, bodyEl, emptyText) => {
-      if (!rows.length) {
-        bodyEl.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:18px;color:var(--text-muted);font-weight:800;">${__oms.escape(emptyText)}</td></tr>`;
-        return;
+        renderRiders();
+        fdSetEmpName();
+        fdUpdateScanLock();
+        updateDebriefingRiderName();
+        renderShipmentViews();
+        clearRiderForm();
+        alert('Rider setup save ho gaya.');
       }
 
-      bodyEl.innerHTML = rows.map((r, idx) => `
-        <tr>
-          <td style="font-weight:900;">${idx + 1}</td>
-          <td>${__oms.escape(r.cn || '-') }</td>
-          <td style="word-break:break-word;">${__oms.escape(r.customerName)}</td>
-          <td style="font-weight:950;">${__oms.escape(r.amountDisplay)}</td>
-          <td>
-            <button class="btn btn-danger" data-action="leopards-remove-row" data-tab="${__oms.escape(r.tab)}" data-index="${idx}" style="padding:8px 10px;font-size:.82rem;border-radius:8px;">
-              Remove
-            </button>
-          </td>
-        </tr>
-      `).join('');
-    };
+      function fdGetCounter() {
+        var n = fdCounter ? Number(fdCounter.value) : 0;
+        return isFinite(n) ? n : 0;
+      }
 
-    if (tabName === 'Leopards-General') {
-      const productSel = __oms.byId('lg-product');
-      const customerInput = __oms.byId('lg-customer-name');
-      const amountInput = __oms.byId('lg-amount');
-      const addBtn = __oms.byId('lg-add-scan-btn'); // keeps existing button
-      const body = __oms.byId('lg-scan-table-body');
-      const counterEl = __oms.byId('lg-scan-counter');
+      function fdSetEmpName() {
+        var code;
+        var rider;
+        if (!fdEmpCode || !fdEmpName) return;
+        code = trimText(fdEmpCode.value).toUpperCase();
+        rider = findRiderByCode(code);
+        fdEmpName.value = rider ? rider.name : '';
+      }
 
-      const getRows = () => __oms.state.leopardsDseGeneralRows;
+      function fdUpdateScanLock() {
+        var code = fdEmpCode ? trimText(fdEmpCode.value) : '';
+        var isReady = !!findRiderByCode(code);
 
-      const renderAll = () => {
-        renderLeopardsRowsTable(getRows(), body, 'No scans yet');
-        counterEl.textContent = String(getRows().length);
-      };
+        if (fdCnScan) {
+          fdCnScan.disabled = !isReady;
+          fdCnScan.placeholder = isReady ? 'Scan / Enter CN' : 'Pehle valid Emp Code enter karein';
+          fdCnScan.style.opacity = isReady ? '1' : '0.55';
+        }
+        if (fdBtnScan) {
+          fdBtnScan.disabled = !isReady;
+          fdBtnScan.style.opacity = isReady ? '1' : '0.55';
+        }
+      }
 
-      addBtn.addEventListener('click', () => {
-        const product = String(productSel?.value || '').trim(); // COD or GENERAL
-        const customerName = String(customerInput?.value || '').trim();
-        const amountNum = toMoney(amountInput?.value);
+      function fdSetProduct(productName) {
+        var buttons = [fdOptCOD, fdOptGeneral];
+        if (fdProductSelectSlot) fdProductSelectSlot.textContent = productName;
+        if (fdSelectedOpt) fdSelectedOpt.textContent = 'Selected: ' + productName;
 
-        if (!product) return alert('Please select COD / GENERAL.');
-        const empNo = String(__oms.byId('lg-emp-no')?.value ?? '').trim();
-        if (!empNo) return alert('Please enter Emp # first.');
+        buttons.forEach(function (button) {
+          var isSelected;
+          if (!button) return;
+          isSelected = trimText(button.textContent).toUpperCase() === productName.toUpperCase();
+          button.style.background = isSelected ? 'rgba(0,210,255,0.30)' : 'rgba(255,255,255,0.04)';
+          button.style.borderColor = isSelected ? 'rgba(0,210,255,0.60)' : 'rgba(255,255,255,0.10)';
+        });
+      }
 
-        const cnInput = __oms.byId('lg-scan-input');
-        const cnValue = String(cnInput?.value || '').trim();
-        if (!cnValue) return alert('Please scan or enter a CN#.');
+      function fdAddCnToList(cn) {
+        var row;
+        var srCell;
+        var cnCell;
+        var productCell;
+        var product;
 
-        const rows = getRows();
-        rows.push({
-          tab: 'Leopards-General',
-          product,
-          customerName: 'N/A',
-          amount: 0,
-          amountDisplay: '0',
-          cn: cnValue
+        if (!fdCnList) return;
+        if (fdCnEmptyRow && fdCnEmptyRow.parentNode) fdCnEmptyRow.parentNode.removeChild(fdCnEmptyRow);
+
+        row = document.createElement('tr');
+        srCell = document.createElement('td');
+        cnCell = document.createElement('td');
+        productCell = document.createElement('td');
+        product = fdProductSelectSlot ? trimText(fdProductSelectSlot.textContent) : '-';
+
+        srCell.textContent = String(fdCnList.children.length + 1);
+        cnCell.textContent = cn;
+        productCell.textContent = product === 'Product' ? '-' : product;
+
+        row.appendChild(srCell);
+        row.appendChild(cnCell);
+        row.appendChild(productCell);
+        fdCnList.appendChild(row);
+      }
+
+      function fdGetCnRows() {
+        var rows = [];
+        if (!fdCnList) return rows;
+
+        toArray(fdCnList.querySelectorAll('tr')).forEach(function (row) {
+          if (row.id === 'fdCnEmptyRow') return;
+          rows.push(toArray(row.children).map(function (cell) {
+            return trimText(cell.textContent);
+          }));
+        });
+        return rows;
+      }
+
+      function fdBuildMobileText() {
+        var rows = fdGetCnRows();
+        var empCode = fdEmpCode ? trimText(fdEmpCode.value) : '-';
+        var empName = fdEmpName ? trimText(fdEmpName.value) : '-';
+        var product = fdProductSelectSlot ? trimText(fdProductSelectSlot.textContent) : '-';
+        var productText = product === 'Product' ? '-' : product;
+        var lines = [];
+
+        if (!rows.length) return '';
+        lines.push('FORWARD DESK');
+        lines.push('Emp Code: ' + (empCode || '-'));
+        lines.push('Emp Name: ' + (empName || '-'));
+        lines.push('Product: ' + (productText || '-'));
+        lines.push('Total CN: ' + rows.length);
+        lines.push('');
+        rows.forEach(function (row) {
+          lines.push(row[0] + '. ' + row[1] + ' - ' + (row[2] || '-'));
         });
 
-        cnInput.value = '';
-        renderAll();
-      });
-
-      renderAll();
-    }
-
-    if (tabName === 'Leopards-COD Shift') {
-      // Emp # -> Emp Name auto-fill (from Setup-Riders)
-      const empNoInput = __oms.byId('lc-emp-no');
-      const empNameInput = __oms.byId('lc-emp-name');
-
-      const lookupAndFill = () => {
-        if (!empNoInput || !empNameInput) return;
-        const empNo = String(empNoInput.value ?? '').trim();
-        if (!empNo) return;
-
-        const list = Array.isArray(__oms.state.riders) ? __oms.state.riders : [];
-        const match = list.find(r => String(r.empNo) === empNo);
-        if (match) empNameInput.value = match.name || '';
-      };
-
-      if (empNoInput) {
-        empNoInput.addEventListener('input', lookupAndFill);
-        empNoInput.addEventListener('change', lookupAndFill);
-        lookupAndFill();
+        return lines.join('\n');
       }
 
-      const productSel = __oms.byId('lc-product');
-      const customerInput = __oms.byId('lc-customer-name');
-      const amountInput = __oms.byId('lc-amount');
-      const addBtn = __oms.byId('lc-add-scan-btn'); // keeps existing button
-      const body = __oms.byId('lc-scan-table-body');
-      const counterEl = __oms.byId('lc-scan-counter');
+      function fdGetCurrentBatch() {
+        var rows = fdGetCnRows();
+        var now = new Date();
+        var isoDate = fdTodayIso(now);
+        var routeCode = fdEmpCode ? trimText(fdEmpCode.value) : '';
+        var routeName = fdEmpName ? trimText(fdEmpName.value) : '';
+        var product = fdProductSelectSlot ? trimText(fdProductSelectSlot.textContent) : '-';
 
-      const getRows = () => __oms.state.leopardsDseCodShiftRows;
+        if (product === 'Product') product = '-';
+        return {
+          id: String(now.getTime()),
+          routeCode: routeCode || '-',
+          routeName: routeName || '-',
+          product: product || '-',
+          date: now.toLocaleDateString(),
+          isoDate: isoDate,
+          time: now.toLocaleTimeString(),
+          createdAt: now.toISOString(),
+          rows: rows
+        };
+      }
 
-      const renderAll = () => {
-        renderLeopardsRowsTable(getRows(), body, 'No scans yet');
-        counterEl.textContent = String(getRows().length);
-      };
+      function fdLoadReports() {
+        var raw;
+        try {
+          raw = localStorage.getItem(fdReportStorageKey);
+          return raw ? JSON.parse(raw) : [];
+        } catch (error) {
+          return [];
+        }
+      }
 
-      addBtn.addEventListener('click', () => {
-        const product = String(productSel?.value || '').trim(); // COD or GENERAL
-        const customerName = String(customerInput?.value || '').trim();
-        const amountNum = toMoney(amountInput?.value);
+      function fdSaveReports(reports) {
+        try {
+          localStorage.setItem(fdReportStorageKey, JSON.stringify(reports));
+          return true;
+        } catch (error) {
+          alert('Report save nahi ho saki. Browser storage full ya blocked hai.');
+          return false;
+        }
+      }
 
-        if (!product) return alert('Please select COD / GENERAL.');
-        if (!customerName) return alert('Please enter customer name.');
-        if (!Number.isFinite(amountNum) || amountNum <= 0) return alert('Please enter a valid amount.');
+      function loadShipments() {
+        var raw;
+        try {
+          raw = localStorage.getItem(shipmentStorageKey);
+          return raw ? JSON.parse(raw) : [];
+        } catch (error) {
+          return [];
+        }
+      }
 
-        const rows = getRows();
-        rows.push({
-          tab: 'Leopards-COD Shift',
-          product,
-          customerName,
-          amount: amountNum,
-          amountDisplay: amountNum.toString(),
-          cn: '' // placeholder
+      function saveShipments(shipments) {
+        try {
+          localStorage.setItem(shipmentStorageKey, JSON.stringify(shipments));
+          return true;
+        } catch (error) {
+          alert('Shipment data save nahi ho saka.');
+          return false;
+        }
+      }
+
+      function upsertShipmentsFromBatch(batch) {
+        var shipments = loadShipments();
+        var now = new Date();
+        var dateText = batch.date || now.toLocaleDateString();
+        var isoDate = batch.isoDate || fdDateToIso(dateText) || fdTodayIso(now);
+        var timeText = batch.time || now.toLocaleTimeString();
+
+        (batch.rows || []).forEach(function (row) {
+          var cn = row[1] || '';
+          var found = false;
+          if (!cn) return;
+          shipments = shipments.map(function (shipment) {
+            if (String(shipment.cn) === String(cn)) {
+              found = true;
+              shipment.routeCode = batch.routeCode || shipment.routeCode || '-';
+              shipment.routeName = batch.routeName || shipment.routeName || '-';
+              shipment.product = batch.product || shipment.product || '-';
+              shipment.assignedDate = shipment.assignedDate || dateText;
+              shipment.assignedIsoDate = shipment.assignedIsoDate || isoDate;
+              shipment.assignedTime = shipment.assignedTime || timeText;
+            }
+            return shipment;
+          });
+          if (!found) {
+            shipments.push({
+              cn: cn,
+              routeCode: batch.routeCode || '-',
+              routeName: batch.routeName || '-',
+              product: batch.product || '-',
+              status: 'PENDING',
+              assignedDate: dateText,
+              assignedIsoDate: isoDate,
+              assignedTime: timeText,
+              deliveredDate: '',
+              deliveredTime: ''
+            });
+          }
         });
 
-        customerInput.value = '';
-        amountInput.value = '';
-        renderAll();
-      });
-
-      renderAll();
-    }
-
-    // Delegate click handlers (acknowledge / close sheet)
-    // One listener per page render: fine because we reattach to main-display only once.
-    const display = __oms.byId('main-display');
-    display.onclick = (e) => {
-      const btn = e.target.closest('[data-action]');
-      if (!btn) return;
-
-      const action = btn.getAttribute('data-action');
-      const id = btn.getAttribute('data-id');
-      const cn = btn.getAttribute('data-cn');
-
-      if (action === 'acknowledge') {
-        __oms.state.exceptions = __oms.state.exceptions.map(ex => ex.id === id ? {...ex, status:'Acknowledged'} : ex);
-        __oms.switchTab('Control Tower');
-        alert('Shipment ' + id + ' has been acknowledged in the system.');
+        if (!saveShipments(shipments)) return false;
+        renderShipmentViews();
+        return true;
       }
 
-      if (action === 'close-sheet') {
-        __oms.state.runSheets = __oms.state.runSheets.map(rs => rs.id === id ? {...rs, status:'Closed'} : rs);
-        __oms.switchTab('Debriefing');
-        alert('Run Sheet ' + id + ' has been closed and updated.');
+      function appendEmptyRow(tbody, colspan, text) {
+        var tr = document.createElement('tr');
+        var td = document.createElement('td');
+        td.colSpan = colspan;
+        td.style.textAlign = 'center';
+        td.style.color = '#d8e4f3';
+        td.textContent = text;
+        tr.appendChild(td);
+        tbody.appendChild(tr);
       }
 
-      // Delete Status / View Status (LeopardOMS result rows)
-      // NOTE: Actual delete/view API not implemented (endpoint/schema not provided).
-      if (action === 'view-status-row') {
+      function renderSimpleShipmentRows(tbody, rows, mode) {
+        if (!tbody) return;
+        tbody.innerHTML = '';
+        if (!rows.length) {
+          appendEmptyRow(tbody, mode === 'pendingAssign' || mode === 'pendingStatus' ? 4 : (mode === 'delivered' ? 7 : 6), mode === 'delivered' ? 'No delivered CN' : 'No CN data');
+          return;
+        }
+        rows.forEach(function (shipment, index) {
+          var tr = document.createElement('tr');
+          var values;
+          if (mode === 'pendingAssign') {
+            values = [String(index + 1), shipment.cn || '-', (shipment.routeName || '-') + ' (' + (shipment.routeCode || '-') + ')', shipment.assignedDate || fdShipmentAssignIso(shipment) || '-'];
+          } else if (mode === 'pendingStatus') {
+            values = [String(index + 1), shipment.cn || '-', shipment.status || '-', shipment.assignedDate || fdShipmentAssignIso(shipment) || '-'];
+          } else if (mode === 'delivered') {
+            values = [String(index + 1), shipment.cn || '-', shipment.routeCode || '-', shipment.routeName || '-', shipment.assignedDate || fdShipmentAssignIso(shipment) || '-', (shipment.deliveredDate || '-') + ' ' + (shipment.deliveredTime || ''), shipment.status || '-'];
+          } else {
+            values = [String(index + 1), shipment.cn || '-', shipment.routeCode || '-', shipment.routeName || '-', shipment.status || '-', shipment.assignedDate || '-'];
+          }
+          values.forEach(function (value) {
+            var td = document.createElement('td');
+            td.textContent = value;
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+      }
+
+      function renderAssignSummary(shipments, filterDate) {
+        var byRider = {};
+        var date = trimText(filterDate);
+        if (!assignSummaryRows) return;
+        assignSummaryRows.innerHTML = '';
+
+        shipments.forEach(function (shipment) {
+          var code = shipment.routeCode || '-';
+          if (date && fdShipmentAssignIso(shipment) !== date) return;
+          if (!byRider[code]) {
+            byRider[code] = {
+              code: code,
+              name: shipment.routeName || '-',
+              total: 0,
+              delivered: 0,
+              pending: 0
+            };
+          }
+          byRider[code].total += 1;
+          if (shipment.status === 'DELIVERED') byRider[code].delivered += 1;
+          else byRider[code].pending += 1;
+        });
+
+        var keys = Object.keys(byRider);
+        if (!keys.length) {
+          appendEmptyRow(assignSummaryRows, 7, 'No shipment data');
+          return;
+        }
+
+        keys.forEach(function (code, index) {
+          var item = byRider[code];
+          var percent = item.total ? Math.round((item.delivered / item.total) * 100) : 0;
+          var tr = document.createElement('tr');
+          var values = [String(index + 1), item.code, item.name, String(item.total), String(item.delivered), String(item.pending), percent + '%'];
+          values.forEach(function (value) {
+            var td = document.createElement('td');
+            td.textContent = value;
+            tr.appendChild(td);
+          });
+          assignSummaryRows.appendChild(tr);
+        });
+      }
+
+      function renderShipmentViews() {
+        var shipments = loadShipments();
+        var pending = [];
+        var delivered = [];
+        var pendingDate = pendingDateFilter ? trimText(pendingDateFilter.value) : '';
+        var deliveredDate = deliveredDateFilter ? trimText(deliveredDateFilter.value) : '';
+        var summaryDate = summaryDateFilter ? trimText(summaryDateFilter.value) : '';
+        shipments.forEach(function (shipment) {
+          var assignDate = fdShipmentAssignIso(shipment);
+          if (shipment.status === 'DELIVERED') {
+            if (!deliveredDate || assignDate === deliveredDate) delivered.push(shipment);
+          } else {
+            if (!pendingDate || assignDate === pendingDate) pending.push(shipment);
+          }
+        });
+
+        renderSimpleShipmentRows(addPendingAssignRows, pending, 'pendingAssign');
+        renderSimpleShipmentRows(addPendingStatusRows, pending, 'pendingStatus');
+        renderSimpleShipmentRows(deliveredRows, delivered, 'delivered');
+        renderSimpleShipmentRows(deleteStatusRows, shipments, 'delete');
+        renderAssignSummary(shipments, summaryDate);
+      }
+
+      function setDefaultDateFilters() {
+        var today = fdTodayIso();
+        if (pendingDateFilter && !pendingDateFilter.value) pendingDateFilter.value = today;
+        if (deliveredDateFilter && !deliveredDateFilter.value) deliveredDateFilter.value = today;
+        if (summaryDateFilter && !summaryDateFilter.value) summaryDateFilter.value = today;
+        if (reportDate && !reportDate.value) reportDate.value = today;
+      }
+
+      function markDeliveredCn() {
+        var cn = deliveredCnInput ? trimText(deliveredCnInput.value) : '';
+        var shipments = loadShipments();
+        var found = false;
+        var now = new Date();
+        var isoDate = fdTodayIso(now);
         if (!cn) return;
-        alert('View CN: ' + cn + '\\n(Next step: open a details page or call a live VIEW endpoint once available.)');
+
+        shipments = shipments.map(function (shipment) {
+          if (String(shipment.cn) === String(cn)) {
+            found = true;
+            shipment.status = 'DELIVERED';
+            shipment.assignedDate = shipment.assignedDate || now.toLocaleDateString();
+            shipment.assignedIsoDate = shipment.assignedIsoDate || isoDate;
+            shipment.assignedTime = shipment.assignedTime || now.toLocaleTimeString();
+            shipment.deliveredDate = now.toLocaleDateString();
+            shipment.deliveredTime = now.toLocaleTimeString();
+          }
+          return shipment;
+        });
+
+        if (!found) {
+          shipments.push({
+            cn: cn,
+            routeCode: '-',
+            routeName: '-',
+            product: '-',
+            status: 'DELIVERED',
+            assignedDate: now.toLocaleDateString(),
+            assignedIsoDate: isoDate,
+            assignedTime: now.toLocaleTimeString(),
+            deliveredDate: now.toLocaleDateString(),
+            deliveredTime: now.toLocaleTimeString()
+          });
+        }
+
+        if (!saveShipments(shipments)) return;
+        if (deliveredCnInput) deliveredCnInput.value = '';
+        renderShipmentViews();
       }
 
-      if (action === 'delete-status-row') {
+      function deleteShipmentCn() {
+        var cn = deleteCnInput ? trimText(deleteCnInput.value) : '';
+        var shipments = loadShipments();
+        var next = [];
+        var removed = false;
         if (!cn) return;
-        const ok = confirm('Delete status record for CN: ' + cn + '? (Demo placeholder)');
-        if (!ok) return;
-        alert('Delete triggered for CN: ' + cn + '\n(Next step: connect to the real DELETE endpoint after schema confirmation.)');
+
+        shipments.forEach(function (shipment) {
+          if (String(shipment.cn) === String(cn)) {
+            removed = true;
+            return;
+          }
+          next.push(shipment);
+        });
+
+        if (!removed) {
+          alert('CN nahi mila.');
+          return;
+        }
+        if (!saveShipments(next)) return;
+        if (deleteCnInput) deleteCnInput.value = '';
+        renderShipmentViews();
       }
 
-      // Setup-Riders: delete rider by Emp #
-      if (action === 'rider-delete') {
-        const empNo = btn.getAttribute('data-empno') || '';
-        const empNoNorm = String(empNo).trim();
-        if (!empNoNorm) return;
+      function addPendingCnFromDebriefing() {
+        var cn = txtCn ? trimText(txtCn.value) : '';
+        var routeCode = txtCourier ? trimText(txtCourier.value).toUpperCase() : '-';
+        var rider = findRiderByCode(routeCode);
+        var now = new Date();
+        var isoDate = fdTodayIso(now);
+        var shipments;
+        var found = false;
 
-        const ok = confirm('Delete rider with Emp # ' + empNoNorm + '?');
-        if (!ok) return;
+        if (!cn) return;
+        if (routeCode !== '-' && routeCode && rider && txtCourName) txtCourName.value = rider.name || '';
 
-        __oms.state.riders = (Array.isArray(__oms.state.riders) ? __oms.state.riders : [])
-          .filter(r => String(r.empNo || '').trim() !== empNoNorm);
+        shipments = loadShipments();
+        shipments = shipments.map(function (shipment) {
+          if (String(shipment.cn) === String(cn)) {
+            found = true;
+            if (shipment.status !== 'DELIVERED') shipment.status = 'PENDING';
+            shipment.routeCode = routeCode || shipment.routeCode || '-';
+            shipment.routeName = rider ? rider.name : (shipment.routeName || '-');
+            shipment.assignedDate = shipment.assignedDate || now.toLocaleDateString();
+            shipment.assignedIsoDate = shipment.assignedIsoDate || isoDate;
+            shipment.assignedTime = shipment.assignedTime || now.toLocaleTimeString();
+          }
+          return shipment;
+        });
 
-        __oms.switchTab('Setup-Riders');
-        alert('Rider deleted: Emp # ' + empNoNorm);
+        if (!found) {
+          shipments.push({
+            cn: cn,
+            routeCode: routeCode || '-',
+            routeName: rider ? rider.name : '-',
+            product: '-',
+            status: 'PENDING',
+            assignedDate: now.toLocaleDateString(),
+            assignedIsoDate: isoDate,
+            assignedTime: now.toLocaleTimeString(),
+            deliveredDate: '',
+            deliveredTime: ''
+          });
+        }
+
+        if (!saveShipments(shipments)) return;
+        if (txtCounter) txtCounter.value = String(Number(txtCounter.value || 0) + 1);
+        if (txtCn) {
+          txtCn.value = '';
+          txtCn.focus();
+        }
+        renderShipmentViews();
       }
-    };
-  };
 
-  // ---------------- Nav click wiring ----------------
-  __oms.bindNav = () => {
-    const root = __oms.byId('navRoot');
-    root.addEventListener('click', (e) => {
-      const item = e.target.closest('.nav-item');
-      if (!item) return;
-      const tab = item.getAttribute('data-tab');
-      if (!tab) return;
-      __oms.switchTab(tab);
-    });
-
-    // Keyboard navigation (Enter)
-    root.addEventListener('keydown', (e) => {
-      const el = e.target;
-      if (!el || !el.getAttribute) return;
-      if ((e.key === 'Enter' || e.key === ' ') && el.classList.contains('nav-item')) {
-        e.preventDefault();
-        const tab = el.getAttribute('data-tab');
-        if (tab) __oms.switchTab(tab);
+      function updateDebriefingRiderName() {
+        var code = txtCourier ? trimText(txtCourier.value).toUpperCase() : '';
+        var rider = findRiderByCode(code);
+        if (txtCourName) txtCourName.value = rider ? rider.name : '';
       }
-    });
-  };
 
-  // ---------------- Init ----------------
-  document.addEventListener('DOMContentLoaded', () => {
-    __oms.bindNav();
-    __oms.updateDateTime();
-    setInterval(__oms.updateDateTime, 1000);
-    __oms.switchTab('Home');
-  });
-</script>
+      function fdFindReportById(id) {
+        var reports = fdLoadReports();
+        var found = null;
+        reports.forEach(function (report) {
+          if (String(report.id) === String(id)) found = report;
+        });
+        return found;
+      }
+
+      function fdSaveCurrentBatch() {
+        var batch = fdGetCurrentBatch();
+        var reports;
+        var rider = findRiderByCode(batch.routeCode);
+
+        if (!batch.rows.length) return null;
+        if (!rider) {
+          alert('Pehle valid Emp Code enter karein. Rider Setup me code add hona zaroori hai.');
+          if (fdEmpCode) fdEmpCode.focus();
+          return null;
+        }
+        batch.routeName = rider.name || batch.routeName;
+        reports = fdLoadReports();
+        reports.push(batch);
+        if (!fdSaveReports(reports)) return null;
+        if (!upsertShipmentsFromBatch(batch)) return null;
+        return batch;
+      }
+
+      function fdClearEnteredCn() {
+        if (fdCnList) {
+          fdCnList.innerHTML = '';
+          if (fdCnEmptyRow) fdCnList.appendChild(fdCnEmptyRow);
+        }
+        fdSetCounter(0);
+        if (fdCnScan) {
+          fdCnScan.value = '';
+          fdCnScan.focus();
+        }
+      }
+
+      function fdBuildReportRows(filterCode, filterDate) {
+        var reports = fdLoadReports();
+        var filtered = [];
+        var code = trimText(filterCode).toUpperCase();
+        var date = trimText(filterDate);
+
+        if (!code) return filtered;
+
+        reports.forEach(function (report) {
+          var reportDateValue = report.isoDate || fdDateToIso(report.date) || '';
+          if (String(report.routeCode || '').toUpperCase() !== code) return;
+          if (date && reportDateValue && reportDateValue !== date) return;
+          if (date && !reportDateValue) return;
+          filtered.push(report);
+        });
+        filtered.sort(function (a, b) {
+          return String(b.createdAt || b.id).localeCompare(String(a.createdAt || a.id));
+        });
+        return filtered;
+      }
+
+      function fdRenderReport(filterCode, filterDate) {
+        var rows;
+        if (!forwardReportRows) return;
+        rows = fdBuildReportRows(filterCode || '', filterDate || '');
+        forwardReportRows.innerHTML = '';
+
+        if (!rows.length) {
+          var emptyRow = document.createElement('tr');
+          var emptyCell = document.createElement('td');
+          emptyCell.colSpan = 8;
+          emptyCell.style.textAlign = 'center';
+          emptyCell.style.color = '#d8e4f3';
+          emptyCell.textContent = trimText(filterCode) ? 'No pushed data' : 'Emp code enter karein';
+          emptyRow.appendChild(emptyCell);
+          forwardReportRows.appendChild(emptyRow);
+          return;
+        }
+
+        rows.forEach(function (report, index) {
+          var tr = document.createElement('tr');
+          var values = [
+            String(index + 1),
+            report.routeCode || '-',
+            report.routeName || '-',
+            report.product || '-',
+            String((report.rows || []).length),
+            report.date || '-',
+            report.time || '-'
+          ];
+
+          values.forEach(function (value) {
+            var td = document.createElement('td');
+            td.textContent = value;
+            tr.appendChild(td);
+          });
+
+          var actionTd = document.createElement('td');
+          var reprintBtn = document.createElement('button');
+          reprintBtn.type = 'button';
+          reprintBtn.className = 'card-btn';
+          reprintBtn.style.padding = '8px 12px';
+          reprintBtn.style.fontWeight = '900';
+          reprintBtn.style.background = 'rgba(0,210,255,0.16)';
+          reprintBtn.textContent = 'Reprint';
+          reprintBtn.setAttribute('data-report-id', report.id);
+          actionTd.appendChild(reprintBtn);
+          tr.appendChild(actionTd);
+          forwardReportRows.appendChild(tr);
+        });
+      }
+
+      function fdCreateBarcodeSvg(value) {
+        var cleanValue = trimText(value);
+        var codes = [104];
+        var checksum = 104;
+        var i;
+        var pattern;
+        var x = 0;
+        var moduleWidth = 1.35;
+        var height = 42;
+        var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+
+        if (!cleanValue) cleanValue = '-';
+        for (i = 0; i < cleanValue.length; i += 1) {
+          var ascii = cleanValue.charCodeAt(i);
+          if (ascii < 32 || ascii > 127) ascii = 45;
+          codes.push(ascii - 32);
+        }
+
+        for (i = 1; i < codes.length; i += 1) {
+          checksum += codes[i] * i;
+        }
+        codes.push(checksum % 103);
+        codes.push(106);
+
+        for (i = 0; i < codes.length; i += 1) {
+          pattern = code128Patterns[codes[i]];
+          for (var j = 0; j < pattern.length; j += 1) {
+            var width = Number(pattern.charAt(j)) * moduleWidth;
+            if (j % 2 === 0) {
+              var rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+              rect.setAttribute('x', String(x));
+              rect.setAttribute('y', '0');
+              rect.setAttribute('width', String(width));
+              rect.setAttribute('height', String(height));
+              rect.setAttribute('fill', '#000');
+              svg.appendChild(rect);
+            }
+            x += width;
+          }
+        }
+
+        svg.setAttribute('class', 'print-barcode');
+        svg.setAttribute('viewBox', '0 0 ' + x + ' ' + height);
+        svg.setAttribute('preserveAspectRatio', 'none');
+        return svg;
+      }
+
+      function fdPreparePrintSheet(report) {
+        var rows;
+        var now = new Date();
+        var routeCode;
+        var routeName;
+        var product;
+
+        if (report) {
+          rows = report.rows || [];
+          routeCode = report.routeCode || '-';
+          routeName = report.routeName || '-';
+          product = report.product || '-';
+        } else {
+          rows = fdGetCnRows();
+          routeCode = fdEmpCode ? trimText(fdEmpCode.value) : '-';
+          routeName = fdEmpName ? trimText(fdEmpName.value) : '-';
+          product = fdProductSelectSlot ? trimText(fdProductSelectSlot.textContent) : '-';
+        }
+
+        if (product === 'Product') product = '-';
+        if (printRouteCode) printRouteCode.textContent = routeCode || '-';
+        if (printRouteName) printRouteName.textContent = routeName || '-';
+        if (printProduct) printProduct.textContent = product || '-';
+        if (printTotalCn) printTotalCn.textContent = String(rows.length);
+        if (printDate) printDate.textContent = report ? (report.date || '-') : now.toLocaleDateString();
+        if (printTime) printTime.textContent = report ? (report.time || '-') : now.toLocaleTimeString();
+        if (!printCnRows) return;
+
+        printCnRows.innerHTML = '';
+        rows.forEach(function (row) {
+          var tr = document.createElement('tr');
+          var srCell = document.createElement('td');
+          var cnCell = document.createElement('td');
+          var barcodeCell = document.createElement('td');
+
+          srCell.textContent = row[0];
+          cnCell.textContent = row[1];
+          barcodeCell.appendChild(fdCreateBarcodeSvg(row[1]));
+          tr.appendChild(srCell);
+          tr.appendChild(cnCell);
+          tr.appendChild(barcodeCell);
+          printCnRows.appendChild(tr);
+        });
+      }
+
+      function fdPrintMobileList() {
+        var batch;
+        if (!fdGetCnRows().length) {
+          alert('Pehle CN enter karein.');
+          return;
+        }
+        batch = fdSaveCurrentBatch();
+        if (!batch) return;
+        if (reportEmpCode) reportEmpCode.value = batch.routeCode === '-' ? '' : batch.routeCode;
+        if (reportDate) reportDate.value = batch.isoDate || '';
+        fdRenderReport(batch.routeCode === '-' ? '' : batch.routeCode, reportDate ? reportDate.value : '');
+        fdPreparePrintSheet(batch);
+        window.print();
+        fdClearEnteredCn();
+      }
+
+      function fdReprintReport(reportId) {
+        var report = fdFindReportById(reportId);
+        if (!report) {
+          alert('Report data nahi mila.');
+          return;
+        }
+        fdPreparePrintSheet(report);
+        window.print();
+      }
+
+      function fdPushToMobile() {
+        var batch;
+
+        if (!fdGetCnRows().length) {
+          alert('Pehle CN enter karein.');
+          return;
+        }
+
+        batch = fdSaveCurrentBatch();
+        if (!batch) return;
+
+        if (reportEmpCode) reportEmpCode.value = batch.routeCode === '-' ? '' : batch.routeCode;
+        if (reportDate) reportDate.value = batch.isoDate || '';
+        fdRenderReport(batch.routeCode === '-' ? '' : batch.routeCode, reportDate ? reportDate.value : '');
+        fdClearEnteredCn();
+        alert('Data push ho gaya aur report me save ho gaya.');
+      }
+
+      function fdIncrement() {
+        var cn = fdCnScan ? trimText(fdCnScan.value) : '';
+        var riderCode = fdEmpCode ? trimText(fdEmpCode.value) : '';
+        var rider = findRiderByCode(riderCode);
+
+        if (!riderCode) {
+          alert('Pehle Emp Code enter karein.');
+          if (fdEmpCode) fdEmpCode.focus();
+          return;
+        }
+        if (!rider) {
+          alert('Ye Emp Code Rider Setup me add nahi hai.');
+          if (fdEmpCode) fdEmpCode.focus();
+          return;
+        }
+        if (!cn) return;
+
+        fdSetCounter(fdGetCounter() + 1);
+        fdAddCnToList(cn);
+        fdCnScan.value = '';
+        fdCnScan.focus();
+      }
+
+      if (fdEmpCode) {
+        fdEmpCode.addEventListener('input', fdSetEmpName);
+        fdEmpCode.addEventListener('change', fdSetEmpName);
+        fdEmpCode.addEventListener('input', function () {
+          var code = trimText(fdEmpCode.value);
+          if (reportEmpCode) reportEmpCode.value = code;
+          fdUpdateScanLock();
+          fdRenderReport(code, reportDate ? reportDate.value : '');
+        });
+        fdEmpCode.addEventListener('change', function () {
+          var code = trimText(fdEmpCode.value);
+          if (reportEmpCode) reportEmpCode.value = code;
+          fdUpdateScanLock();
+          fdRenderReport(code, reportDate ? reportDate.value : '');
+        });
+      }
+      if (fdOptCOD) fdOptCOD.addEventListener('click', function () { fdSetProduct('COD'); });
+      if (fdOptGeneral) fdOptGeneral.addEventListener('click', function () { fdSetProduct('General'); });
+      if (fdPrintMobile) fdPrintMobile.addEventListener('click', fdPrintMobileList);
+      if (fdPushMobile) fdPushMobile.addEventListener('click', fdPushToMobile);
+      if (btnMarkDelivered) btnMarkDelivered.addEventListener('click', markDeliveredCn);
+      if (deliveredCnInput) {
+        deliveredCnInput.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            markDeliveredCn();
+          }
+        });
+      }
+      if (btnDeleteStatus) btnDeleteStatus.addEventListener('click', deleteShipmentCn);
+      if (deleteCnInput) {
+        deleteCnInput.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            deleteShipmentCn();
+          }
+        });
+      }
+      if (txtCourier) {
+        txtCourier.addEventListener('input', updateDebriefingRiderName);
+        txtCourier.addEventListener('change', updateDebriefingRiderName);
+      }
+      if (txtCn) {
+        txtCn.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            addPendingCnFromDebriefing();
+          }
+        });
+      }
+      if (reportEmpCode) {
+        reportEmpCode.addEventListener('input', function () {
+          fdRenderReport(reportEmpCode.value, reportDate ? reportDate.value : '');
+        });
+      }
+      if (reportDate) {
+        reportDate.addEventListener('change', function () {
+          fdRenderReport(reportEmpCode ? reportEmpCode.value : '', reportDate.value);
+        });
+      }
+      if (pendingDateFilter) pendingDateFilter.addEventListener('change', renderShipmentViews);
+      if (deliveredDateFilter) deliveredDateFilter.addEventListener('change', renderShipmentViews);
+      if (summaryDateFilter) summaryDateFilter.addEventListener('change', renderShipmentViews);
+      if (forwardReportRows) {
+        forwardReportRows.addEventListener('click', function (e) {
+          var target = e.target || e.srcElement;
+          var reportId;
+          if (!target || target.tagName !== 'BUTTON') return;
+          reportId = target.getAttribute('data-report-id');
+          if (reportId) fdReprintReport(reportId);
+        });
+      }
+      if (fdBtnScan) fdBtnScan.addEventListener('click', fdIncrement);
+      if (fdCnScan) {
+        fdCnScan.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            fdIncrement();
+          }
+        });
+      }
+      if (btnSaveRider) btnSaveRider.addEventListener('click', saveRiderFromForm);
+      if (btnClearRider) btnClearRider.addEventListener('click', clearRiderForm);
+      if (riderRows) {
+        riderRows.addEventListener('click', function (e) {
+          var target = e.target || e.srcElement;
+          var code;
+          var rider;
+          if (!target || target.tagName !== 'BUTTON') return;
+          code = target.getAttribute('data-rider-code');
+          rider = findRiderByCode(code);
+          if (!rider) return;
+          if (riderEmpCode) riderEmpCode.value = rider.empCode || '';
+          if (riderName) riderName.value = rider.name || '';
+          if (riderCnic) riderCnic.value = rider.cnic || '';
+          if (riderPhone) riderPhone.value = rider.phone || '';
+          if (riderJoinDate) riderJoinDate.value = rider.joinDate || '';
+          if (riderAddress) riderAddress.value = rider.address || '';
+        });
+      }
+      renderRiders();
+      fdUpdateScanLock();
+      setDefaultDateFilters();
+      renderShipmentViews();
+      fdRenderReport('', reportDate ? reportDate.value : '');
+    })();
+  </script>
 </body>
 </html>
